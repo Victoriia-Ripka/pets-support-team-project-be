@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+const httpError = require('../helpers/httpError');
 const { User } = require("../models/user");
 require('dotenv').config();
 
@@ -10,19 +11,19 @@ const registration = async (req, res) => {
     try {
         await user.save();
     } catch (error) {
-        console.error(error);
+        throw httpError(409, 'Email in use');
     }
     res.status(201).json({ email });
 }
 
-const login = async (email, password) => {
+const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-        // throw new NotAuthorizedError(`Incorrect email or password`);
+        throw httpError(401, 'Incorrect email or password');
     }
     if (!(await bcrypt.compare(password, user.password))) {
-        // throw new NotAuthorizedError('Incorrect email or password');
+        throw httpError(401, 'Incorrect email or password');
     }
     const token = jwt.sign(
     {
@@ -46,9 +47,9 @@ const userUpdate = async (req, res) => {
     const { id } = req.params;
     const user = await User.findByIdAndUpdate(id, { $set: { name, place, phone } })
     if (!user) {
-
+        throw httpError(401);
     }
     res.json({ status: 'success' });
 }
 
-module.exports = {registration, login, logout, userUpdate}
+module.exports = { registration, login, logout, userUpdate };
