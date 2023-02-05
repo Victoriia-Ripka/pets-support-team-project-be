@@ -16,6 +16,9 @@ const getPetsByCategories = async (req, res) => {
 
 
 const getPetById = async (req, res) => {
+
+    // добавить почту и номер телефона от юзера
+
     const { noticeId } = req.params;
     const pet = await Notices.findById(id);
     if (!pet) {

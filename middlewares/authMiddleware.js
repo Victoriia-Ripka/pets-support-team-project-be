@@ -1,14 +1,15 @@
 var jwt = require('jsonwebtoken');
+const { httpError } = require('../helpers');
 const { User } = require('../models/user');
 
-const authMiddleware = async (req, res) => {
+const authMiddleware = async (req, res, next) => {
     const { authorization: auth = '' } = req.headers;
     const [tokenType, token] = auth.split(' ');
     if (!token) {
-        // next()
+        next(httpError(401))
     }
     if (tokenType !== 'Bearer') {
-        // next()
+        next(httpError(401))
     }
 
     try {
@@ -21,7 +22,7 @@ const authMiddleware = async (req, res) => {
         req.user = userExists;
         next();
     } catch (error) {
-        // next();
+        next(httpError(401));
     }
 }
 
