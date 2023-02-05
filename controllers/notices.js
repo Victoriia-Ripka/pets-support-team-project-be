@@ -96,3 +96,7 @@ const deletePet = async (req, res) => {
     }
     res.status(200).json({message: 'success'})
 }
+
+module.exports = {
+    getPetsByCategories, getPetById, addToFavorite, removeFromFavorite, getFavoritePets, addPet, getUserPets, deletePet
+}
