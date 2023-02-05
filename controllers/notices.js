@@ -60,6 +60,39 @@ const getFavoritePets = async (req, res) => {
     const { id } = req.user;
     let skip = 0;
     let limit = 8;
-    // const [pets] = await Notices.find({ category: category }).select(selectCategory).limit(limit).skip(skip).sort({createdAt: -1});
+    const [petsId] = await User.find({ _id: id }).select(selectCategory).limit(limit).skip(skip).sort({createdAt: -1}.fields({favorites: 1}));
+    // const [petsId] = await Notices.find({ _id: id }).populate({
+    //     select: selectCategory,
+    //     limit: limit,
+    //     skip: skip,
+    //     sort: { createdAt: - 1 },
+    //     fields: {favorites: 1}
+    // });
+    console.log(petsId)
     // res.status(200).json(pets);
+}
+
+const addPet = async (req, res) => {
+    const { name, dateofbirth, breed, place, sex, comments, category } = req.body;
+    const { id } = req.user;
+    const pet = new Notices({ owner: id, name, dateofbirth, breed, place, sex, comments, category });
+    await pet.save();
+    res.status(200).json(pet);
+}
+
+const getUserPets = async(req, res) => {
+    const { id } = req.user;
+    let skip = 0;
+    let limit = 8;
+    const pets = await Notices.find({ owner: id }.select(selectCategory).limit(limit).skip(skip).sort({ createdAt: -1 }));
+    res.status(201).json(pets);
+}
+
+const deletePet = async (req, res) => {
+    const { noticeId } = req.body;
+    const pet = await Notices.findByIdAndRemove(noticeId);
+    if (!pet) {
+        res.status(404).json({ message: 'bad request' });
+    }
+    res.status(200).json({message: 'success'})
 }
