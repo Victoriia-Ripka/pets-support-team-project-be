@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-// const Joi = require("joi");
+const Joi = require("joi");
 const { handleMongooseError } = require("../helpers");
 
 const newsSchema = new Schema(
@@ -26,15 +26,15 @@ const newsSchema = new Schema(
 
 newsSchema.post("save", handleMongooseError);
 
-// const getNews = {
-//   title,
-//   url,
-//   description,
-//   date,
-// };
+const getNewsSchema = Joi.object({
+  title: Joi.string().required(),
+  url: Joi.string().required(),
+  description: Joi.string().required(),
+  date: Joi.string().required(),
+});
 
 const schemas = {
-//   getNews,
+  getNewsSchema,
 };
 
 const News = model("news", newsSchema);
