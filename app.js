@@ -7,6 +7,7 @@ require("dotenv").config();
 
 const servicesRouter = require("./routes/api/services");
 const newsRouter = require("./routes/api/news")
+const { authRouter } = require('./routes/api/auth')
 
 const app = express()
 
@@ -17,6 +18,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use("/api/news", newsRouter)
+app.use('/users', authRouter)
 app.use("/api/services", servicesRouter)
 
 app.use((req, res) => {
