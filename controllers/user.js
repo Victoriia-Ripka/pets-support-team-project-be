@@ -3,10 +3,10 @@ const { Pets } = require("../models/user_pets");
 const { ctrlWrapper } = require("../helpers");
 
 const getUserInfo = async (req, res) => {
-  const { id } = req.params;
+  const { _id } = req.user;
 
-  const data = await User.findOne({ _id: id });
-  const pets = await Pets.find({ owner: id });
+  const data = await User.findOne({ _id });
+  const pets = await Pets.find({ owner: _id });
 
   res.status(200).json({
     status: "success",
@@ -21,9 +21,8 @@ const getUserInfo = async (req, res) => {
 };
 
 const addPet = async (req, res) => {
-  const { id } = req.params;
-  // const { _id: owner} = req.user
-  await Pets.create({ ...req.body, owner: id });
+  const { _id: owner } = req.user
+  await Pets.create({ ...req.body, owner });
 
   res.status(201).json({
     status: "success",
@@ -38,10 +37,10 @@ const addPet = async (req, res) => {
 };
 
 const deletePet = async (req, res) => {
-  const { id } = req.params;
+  const { _id: owner } = req.user
   const { pet_id } = req.body;
 
-  const bool = await Pets.findOneAndRemove({ _id: pet_id, owner: id });
+  const bool = await Pets.findOneAndRemove({ _id: pet_id, owner });
   if (!bool) {
     throw HttpError(404);
   } else {

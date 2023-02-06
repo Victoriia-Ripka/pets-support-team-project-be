@@ -11,7 +11,8 @@ const petsSchema = new Schema(
       required: true,
     },
     date: {
-      type: Date,
+      // type: Date,
+      type: String,
       required: true,
     },
     breed: {
@@ -39,7 +40,8 @@ petsSchema.post("save", handleMongooseError);
 
 const AddPet = Joi.object({
   name: Joi.string().min(2).max(16).required(),
-  date: Joi.date().format("DD.MM.YYYY").raw().required(),
+  date: Joi.string().required(),
+  // date: Joi.date().format("DD.MM.YYYY").raw().required(),
   breed: Joi.string().min(2).max(16).required(),
   comment: Joi.string().min(8).max(120).required()
 });
