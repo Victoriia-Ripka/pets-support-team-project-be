@@ -20,7 +20,11 @@ const getPetById = async (req, res) => {
     // добавить почту и номер телефона от юзера
 
     const { noticeId } = req.params;
-    const pet = await Notices.findById(id);
+    const { id } = req.user;
+
+    const pet = await Notices.findById(noticeId);
+    con
+
     if (!pet) {
         res.status(404).json({ message: 'bad request' });
     }
