@@ -1,11 +1,14 @@
 const multer = require("multer");
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 const multerConfig = multer.diskStorage({
   destination: path.join(__dirname, '../', 'temp'),
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
+    filename: (req, file, cb) => {
+        const [, extension] = file.mimetype.split('/');
+        const newImageName = `${uuidv4()}.${extension}`;
+        cb(null, newImageName);
+    },
 });
 
 const fileFilter = (req, file, cb) => {
@@ -21,6 +24,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({
     storage: multerConfig,
+    fileFilter,
     limits: { fileSize: 2097152}
 });
 
