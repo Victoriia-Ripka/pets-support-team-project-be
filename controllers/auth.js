@@ -4,16 +4,15 @@ const httpError = require('../helpers/httpError');
 const { User } = require("../models/user");
 require('dotenv').config();
 const gravatar = require('gravatar');
+const { createAvatar } = require('../helpers/createAvatar');
 
 const registration = async (req, res) => {
     const { email, password, name, place, phone } = req.body;
     const avatarURL = gravatar.url(email);
     const user = new User({ email, password, name, place, phone, avatarURL })
     try {
-        console.log(user)
         await user.save();
     } catch (error) {
-        console.log(error.message)
         throw httpError(409, 'Email in use');
     }
     res.status(201).json({ email });
@@ -41,15 +40,18 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
     const { _id } = req.user;
-    console.log(_id);
     await User.findByIdAndUpdate(_id, { token: '' });
     res.json({ message: 'logout success' });
 };
 
 const userUpdate = async (req, res) => {
     const { name, place, phone, dateofbirth } = req.body;
-    const { id } = req.params;
-    const user = await User.findByIdAndUpdate(id, { $set: { name, place, phone, dateofbirth } })
+    const width = 233;
+    const height = 233;
+    const avatarURL = await createAvatar(req.file.path, width, height);
+    
+    const { _id } = req.user;
+    const user = await User.findByIdAndUpdate(_id, { $set: { name, place, phone, dateofbirth, avatarURL } })
     if (!user) {
         throw httpError(401);
     }

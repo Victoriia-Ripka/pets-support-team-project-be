@@ -18,7 +18,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use("/api/news", newsRouter)
-app.use('/users', authRouter)
+app.use('/api/users', authRouter)
 app.use("/api/services", servicesRouter)
 
 app.use((req, res) => {
