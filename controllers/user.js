@@ -21,7 +21,7 @@ const getUserInfo = async (req, res) => {
 };
 
 const addPet = async (req, res) => {
-  const { _id: owner } = req.user
+  const { _id: owner } = req.user;
   await Pets.create({ ...req.body, owner });
 
   res.status(201).json({
@@ -37,7 +37,7 @@ const addPet = async (req, res) => {
 };
 
 const deletePet = async (req, res) => {
-  const { _id: owner } = req.user
+  const { _id: owner } = req.user;
   const { pet_id } = req.body;
 
   const bool = await Pets.findOneAndRemove({ _id: pet_id, owner });

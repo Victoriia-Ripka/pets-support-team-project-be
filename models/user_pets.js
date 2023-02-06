@@ -43,7 +43,7 @@ const AddPet = Joi.object({
   date: Joi.string().required(),
   // date: Joi.date().format("DD.MM.YYYY").raw().required(),
   breed: Joi.string().min(2).max(16).required(),
-  comment: Joi.string().min(8).max(120).required()
+  comment: Joi.string().min(8).max(120).required(),
 });
 
 const schemas = {
