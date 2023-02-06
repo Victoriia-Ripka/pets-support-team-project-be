@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     place: { type: String, required: true },
     phone: { type: String, required: true },
     dateofbirth: { type: String, required: true, default: "01.01.1900", formData: dateOfBirthSchema},
-    favorites: {type: mongoose.Schema.Types.ObjectId, ref: 'notices'},
+    favorites: {type: [mongoose.Schema.Types.ObjectId], ref: 'notices', default: []},
 },
     { timestamps: true }
 )
