@@ -19,6 +19,7 @@ app.use(express.json());
 
 
 app.use("/api/news", newsRouter);
+app.use("/api/user", userRouter);
 app.use('/api/users', authRouter);
 app.use("/api/services", servicesRouter);
 
