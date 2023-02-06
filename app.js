@@ -5,8 +5,8 @@ const cors = require("cors");
 require("dotenv").config();
 
 const servicesRouter = require("./routes/api/services");
-const newsRouter = require("./routes/api/news")
-const { authRouter } = require('./routes/api/auth')
+const newsRouter = require("./routes/api/news");
+const { authRouter } = require('./routes/api/auth');
 const userRouter = require("./routes/api/user");
 const { noticesRouter } = require('./routes/api/notices');
 
@@ -21,7 +21,7 @@ app.use("/api/news", newsRouter);
 app.use("/api/user", userRouter);
 app.use('/api/users', authRouter);
 app.use("/api/services", servicesRouter);
-app.use('/api/notices', noticesRouter)
+app.use('/api/notices', noticesRouter);
 
 
 
