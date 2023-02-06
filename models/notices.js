@@ -7,10 +7,11 @@ const noticesSchema = new mongoose.Schema({
     dateofbirth: { type: String, required: true, formData: dateOfBirthSchema},
     breed: { type: String, required: true },
     place: { type: String, required: true },
+    price: { type: String, required: true },
     sex: { type: Boolean, required: true },
     comments: { type: String },
     category: { type: String, enum: ['sell', 'lost-found', 'in-good-hands'], default: 'sell', required: true },
-    imageUrl: { type: Boolean, required: true },
+    avatarURL: { type: String, required: true },
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
 },
     { timestamps: true })
