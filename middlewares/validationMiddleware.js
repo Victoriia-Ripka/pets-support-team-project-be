@@ -6,7 +6,7 @@ const userValidation = async (req, res, next) => {
         name: Joi.string().min(3).max(50).required(),
         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua'] } }).required(),
         place: Joi.string().min(2).max(50).required(),
-        password: Joi.string().min(6).max(32).required(),
+        password: Joi.string().min(7).max(32).required(),
         phone: Joi.string().pattern(phoneSchema).required(),
     });
 
