@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-dateOfBirthSchema = /^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/;
+const dateOfBirthSchema = /^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/;
+const phoneSchema = /^\+380[0-9]{9}$/;
 
 const userSchema = new mongoose.Schema({
     email: { type: String, required: [true, 'Email is required'], unique: true },
@@ -10,7 +11,7 @@ const userSchema = new mongoose.Schema({
     avatarURL: { type: String, required: true },
     name: { type: String, required: true },
     place: { type: String, required: true },
-    phone: { type: String, required: true },
+    phone: { type: String, required: true, formData: phoneSchema },
     dateofbirth: { type: String, required: true, default: "01.01.1900", formData: dateOfBirthSchema},
     favorites: {type: [mongoose.Schema.Types.ObjectId], ref: 'notices', default: []},
 },
