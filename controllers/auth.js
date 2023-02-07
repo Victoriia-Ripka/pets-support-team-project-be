@@ -35,13 +35,13 @@ const login = async (req, res) => {
         process.env.JWT_SECRET
     );
     await User.findByIdAndUpdate(user._id, { token });
-    res.json({ token: token, user: { email: user.email, name: user.name, place: user.place, phone: user.phone, avatarURL: user.avatarURL } });
+    res.status(200).json({ token: token, user: { email: user.email, name: user.name, place: user.place, phone: user.phone, avatarURL: user.avatarURL } });
 }
 
 const logout = async (req, res) => {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: '' });
-    res.json({ message: 'logout success' });
+    res.status(200).json({ message: 'logout success' });
 };
 
 const userUpdate = async (req, res) => {
@@ -55,7 +55,7 @@ const userUpdate = async (req, res) => {
     if (!user) {
         throw httpError(401);
     }
-    res.json({ status: 'success' });
+    res.status(200).json({ status: 'success' });
 }
 
 module.exports = { registration, login, logout, userUpdate };

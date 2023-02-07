@@ -42,7 +42,7 @@ const addToFavorite = async (req, res) => {
 
     try {
         await User.findByIdAndUpdate({ _id: id }, { $addToSet: { favorites: noticeId } }, { fields: { favorites: 1 } });
-        res.status(201).json({message: 'success'});
+        res.status(200).json({message: 'success'});
     } catch (error) {
         throw httpError(404, 'bad request');
     }
@@ -58,7 +58,7 @@ const removeFromFavorite = async (req, res) => {
 
     try {
         await User.findByIdAndUpdate({ _id: id }, { $pull: { favorites: noticeId } }, { fields: { favorites: 1 } });
-        res.status(201).json({message: 'success'});
+        res.status(200).json({message: 'success'});
     } catch (error) {
         res.status(404).json({ message: 'bad request' });
     }
@@ -87,7 +87,7 @@ const addPet = async (req, res) => {
     const avatarURL = await createAvatar(req.file.path, width, height);
     const pet = new Notices({ owner: id, name, dateofbirth, breed, place, price, sex, comments, category, avatarURL });
     await pet.save();
-    res.status(200).json(pet);
+    res.status(201).json(pet);
 }
 
 const getUserPets = async(req, res) => {
@@ -95,7 +95,7 @@ const getUserPets = async(req, res) => {
     let skip = 0;
     let limit = 8;
     const pets = await Notices.find({ owner: id }).select(selectCategory).limit(limit).skip(skip).sort({ createdAt: -1 });
-    res.status(201).json(pets);
+    res.status(200).json(pets);
 }
 
 const deletePet = async (req, res) => {
