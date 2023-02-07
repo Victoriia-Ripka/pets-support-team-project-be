@@ -1,0 +1,656 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Petly back-end",
+    "description": "i have to write some description here",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [{ "url": "http://localhost:3000/api" }],
+  "tags": [
+    {
+      "name": "auth",
+      "description": "authorization"
+    },
+    {
+      "name": "services-sidebar",
+      "description": "Petly's friends"
+    },
+    {
+      "name": "news",
+      "description": "Petly's news"
+    },
+    {
+      "name": "notices",
+      "description": "Notices about pets"
+    },
+    {
+      "name": "user",
+      "description": "Privat information about user"
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "409": {
+            "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/news": {
+      "get": {
+        "tags": ["news"],
+        "summary": "petly news",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewsResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/services": {
+      "get": {
+        "tags": ["services-sidebar"],
+        "summary": "petly's friends",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServicesResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": ["user"],
+        "summary": "user's information",
+        "parameters": [],
+        "security": [{ "Bearer Token": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfoResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["user"],
+        "summary": "add user's pet",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "add user's pet",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserAddPetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAddPetResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["user"],
+        "summary": "User registration",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDeletePetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDeletePetResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UserInfoResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success / no content"
+          },
+          "code": {
+            "type": "number",
+            "description": "statuc code"
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "formate": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "token": {
+                    "type": "string"
+                  },
+                  "avatarURL": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "place": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "formate": "phone"
+                  },
+                  "dateofbirth": {
+                    "type": "string",
+                    "format": "dd.mm.yyyy"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "__v": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "pets": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "date": {
+                      "type": "string",
+                      "format": "dd.mm.yyyy"
+                    },
+                    "breed": {
+                      "type": "string"
+                    },
+                    "comment": {
+                      "type": "string"
+                    },
+                    "owner": {
+                      "type": "string",
+                      "description": "User's unique id"
+                    },
+                    "createdAt": {
+                      "type": "date",
+                      "format": "date"
+                    },
+                    "updatedAt": {
+                      "type": "date",
+                      "format": "date"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 200,
+          "result": {
+            "data": {
+              "_id": "63e0c4e3730147ed4e3cf5e9",
+              "email": "vika@gmail.com",
+              "password": "$2b$10$WKu90QOF7tte5X6G/2Uxye7MtbTR1knJLyLY9Wu.op9EMgszEH.nW",
+              "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2UwYzRlMzczMDE0N2VkNGUzY2Y1ZTkiLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA2VDA5OjE0OjExLjk4MloiLCJpYXQiOjE2NzU2NzUwMjd9.LwTFonZ19itrG4oXDa0J9KYINEaNMeyw0Y-jOm5rojQ",
+              "avatarURL": "//www.gravatar.com/avatar/320eab812ab24ef3dbaa2e6dc6e024e0",
+              "name": "vika",
+              "place": "ukraine",
+              "phone": "990333555",
+              "dateofbirth": "01.01.1900",
+              "createdAt": "2023-02-06T09:14:11.982Z",
+              "updatedAt": "2023-02-06T09:17:07.672Z",
+              "__v": 0
+            },
+            "pets": [
+              {
+                "_id": "63e0c535730147ed4e3cf5ed",
+                "name": "petpet",
+                "date": "20.02.2332418",
+                "breed": "cat",
+                "comment": "it's fat and cute. love it",
+                "owner": "63e0c4e3730147ed4e3cf5e9",
+                "createdAt": "2023-02-06T09:15:33.367Z",
+                "updatedAt": "2023-02-06T09:15:33.367Z"
+              }
+            ]
+          }
+        }
+      },
+      "UserAddPetRequest": {
+        "type": "object",
+        "required": ["name", "date", "breed", "comment"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "description": "Pet's birtday",
+            "format": "dd.mm.yyyy"
+          },
+          "breed": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "UserAddPetResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "code": {
+            "type": "number",
+            "description": "statuc code"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string",
+                "format": "dd.mm.yyyy"
+              },
+              "breed": {
+                "type": "string"
+              },
+              "comment": {
+                "type": "string"
+              },
+              "owner": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 201,
+          "data": {
+            "name": "fitfit",
+            "date": "27.05.19",
+            "breed": "spaneale",
+            "comment": "it's fat and cute. love it",
+            "owner": "63e0c4e3730147ed4e3cf5e9"
+          }
+        }
+      },
+      "UserDeletePetRequest": {
+        "type": "object",
+        "required": ["pet_id"],
+        "properties": {
+          "pet_id": {
+            "type": "string"
+          }
+        }
+      },
+      "UserDeletePetResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "code": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 200,
+          "message": "pet deleted"
+        }
+      },
+      "ServicesResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success / no content"
+          },
+          "code": {
+            "type": "number",
+            "description": "statuc code"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "addressUrl": {
+                      "type": "string"
+                    },
+                    "imageUrl": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "workDays": {
+                      "type": "aray",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "isOpen": {
+                            "type": "boolean"
+                          },
+                          "from": {
+                            "type": "string"
+                          },
+                          "to": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "phone": {
+                      "type": "string",
+                      "format": "phone"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 200,
+          "data": {
+            "result": [
+              {
+                "_id": "63df9e94fcc94723e1d67a64",
+                "title": "Притулок для бездомних тварин 'Сіріус'",
+                "url": "https://dogcat.com.ua",
+                "addressUrl": "https://goo.gl/maps/iq8NXEUf31EAQCzc6",
+                "imageUrl": "https://storage.googleapis.com/kidslikev2_bucket/pets-support/images/sponsors/frame_287.png",
+                "address": "Fedorivka, Kyiv Oblast, Ukraine, 07372",
+                "workDays": [
+                  {
+                    "isOpen": false
+                  },
+                  {
+                    "isOpen": false
+                  },
+                  {
+                    "isOpen": false
+                  },
+                  {
+                    "isOpen": false
+                  },
+                  {
+                    "isOpen": false
+                  },
+                  {
+                    "isOpen": true,
+                    "from": "11:00",
+                    "to": "16:00"
+                  },
+                  {
+                    "isOpen": true,
+                    "from": "11:00",
+                    "to": "16:00"
+                  }
+                ],
+                "phone": "+380931934069",
+                "email": null,
+                "createdAt": "2023-02-05T12:18:28.742Z",
+                "updatedAt": "2023-02-05T12:18:28.742Z"
+              }
+            ]
+          }
+        }
+      },
+      "NewsResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "success / no content"
+          },
+          "code": {
+            "type": "number",
+            "description": "statuc code"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "unique id"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "title of the article"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "link to the article",
+                  "format": "url"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "link to the article"
+                },
+                "date": {
+                  "type": "string",
+                  "description": "date of creation the article",
+                  "format": "dd.mm.yyyy"
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 200,
+          "data": [
+            {
+              "_id": "63df7435189c36f49fc87845",
+              "title": "Чому коти норовлять сунути хвіст в обличчя господаря: кілька причин",
+              "url": "https://ukr.media/animals/446231/",
+              "description": "Любителі котів зазвичай досконально знають характер своїх пухнастиків. Одних обов'язково потрібно погладити перед їжею, інші чекають, поки ви відкладете книгу, щоб лягти до вас в ліжко. Але іноді коти поводяться так, що навіть досвідчені кошатники не можуть дати пояснення. Наприклад, чому кіт повертається задом до господаря? На перший погляд здається, ніби це акт неповаги. Все-таки така поведінка котів зовсім не схожа на людські норми пристойності. Однак не судіть строго свого улюбленця, поки не розберетеся в причинах. Розповідаємо, чому кіт повертається задом до господаря. Для цього є кілька причин, інформує Ukr. Media.Ввічлива взаємодія",
+              "date": "2022-08-13"
+            }
+          ]
+        }
+      },
+
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "userId": {
+              "type": "number",
+              "description": "User's id",
+              "example": "32143232436545474"
+            }
+          }
+        },
+        "example": [
+          { "email": "1@gmail.com", "userId": "1" },
+          { "email": "2@gmail.com", "userId": "2" }
+        ]
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
