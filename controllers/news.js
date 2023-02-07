@@ -1,5 +1,5 @@
 const { ctrlWrapper } = require("../helpers");
-const { News } = require("../models/news");
+const { News } = require("../models");
 
 const getAllNews = async (req, res) => {
   const data = await News.find();
