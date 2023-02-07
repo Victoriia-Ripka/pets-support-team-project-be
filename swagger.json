@@ -136,12 +136,12 @@
     "/users": {
       "patch": {
         "tags": ["auth"],
-        "summary": "User registration",
+        "summary": "Update information about user",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Registration's object",
-          "required": true,
+          "description": "Patch's object",
+          "required": false,
           "content": {
             "application/json": {
               "schema": {
@@ -151,7 +151,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -165,8 +165,8 @@
             "description": "Bad request (invalid request body)",
             "content": {}
           },
-          "409": {
-            "description": "Provided email already exists",
+          "401": {
+            "description": "Unauthorized (invalid request body)",
             "content": {}
           }
         }
@@ -386,8 +386,20 @@
           }
         }
       },
-      "UserUpdateRequest": {},
-      "UserUpdateResponse": {},
+      "UserUpdateRequest": {
+        "type": "object",
+        "properties": {
+
+        }
+      },
+      "UserUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        }
+      },
       "UserInfoResponse": {
         "type": "object",
         "properties": {
