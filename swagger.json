@@ -35,7 +35,7 @@
     }
   ],
   "paths": {
-    "/auth/register": {
+    "/users/signup": {
       "post": {
         "tags": ["auth"],
         "summary": "User registration",
@@ -47,7 +47,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
+                "$ref": "#/components/schemas/UserSignupRequest"
               }
             }
           }
@@ -58,7 +58,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
+                  "$ref": "#/components/schemas/UserSignupResponse"
                 }
               }
             }
@@ -69,6 +69,104 @@
           },
           "409": {
             "description": "Provided email already exists",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "User login to the system",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Login's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLoginResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "User logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users": {
+      "patch": {
+        "tags": ["auth"],
+        "summary": "Update information about user",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Patch's object",
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserUpdateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
             "content": {}
           }
         }
@@ -205,6 +303,103 @@
   },
   "components": {
     "schemas": {
+      "UserSignupRequest": {
+        "type": "object",
+        "required": ["email", "password", "name", "place", "phone"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "place": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "format": "phone"
+          }
+        }
+      },
+      "UserSignupResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "UserLoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "UserLoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "format": "email"
+              },
+              "name": {
+                "type": "string"
+              },
+              "place": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string",
+                "format": "phone"
+              },
+              "avatarURL": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "UserLogoutResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "UserUpdateRequest": {
+        "type": "object",
+        "properties": {
+
+        }
+      },
+      "UserUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        }
+      },
       "UserInfoResponse": {
         "type": "object",
         "properties": {
@@ -604,45 +799,6 @@
             }
           ]
         }
-      },
-
-      "RegistrationRequest": {
-        "type": "object",
-        "required": ["email", "password"],
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "User's email",
-            "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password",
-            "example": "qwerty123"
-          }
-        }
-      },
-      "RegistrationResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
-            },
-            "userId": {
-              "type": "number",
-              "description": "User's id",
-              "example": "32143232436545474"
-            }
-          }
-        },
-        "example": [
-          { "email": "1@gmail.com", "userId": "1" },
-          { "email": "2@gmail.com", "userId": "2" }
-        ]
       }
     },
     "securitySchemes": {
