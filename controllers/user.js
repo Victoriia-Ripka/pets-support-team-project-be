@@ -1,6 +1,6 @@
 const { User } = require("../models/user");
 const { Pets } = require("../models/user_pets");
-const { ctrlWrapper } = require("../helpers");
+const { ctrlWrapper, httpError } = require("../helpers");
 
 const getUserInfo = async (req, res) => {
   const { _id } = req.user;
@@ -13,9 +13,7 @@ const getUserInfo = async (req, res) => {
     code: 200,
     result: {
       data,
-      pets: {
-        ...pets,
-      },
+      pets: [...pets],
     },
   });
 };
@@ -27,11 +25,9 @@ const addPet = async (req, res) => {
   res.status(201).json({
     status: "success",
     code: 201,
-    result: {
-      data: {
-        ...req.body,
-        owner,
-      },
+    data: {
+      ...req.body,
+      owner,
     },
   });
 };
@@ -42,7 +38,7 @@ const deletePet = async (req, res) => {
 
   const bool = await Pets.findOneAndRemove({ _id: pet_id, owner });
   if (!bool) {
-    throw HttpError(404);
+    throw httpError(404);
   } else {
     res
       .status(200)

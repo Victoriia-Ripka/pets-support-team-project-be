@@ -123,53 +123,34 @@
     "/user": {
       "get": {
         "tags": ["user"],
-        "summary": "User registration",
+        "summary": "user's information",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Registration's object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
-              }
-            }
-          }
-        },
+        "security": [{ "Bearer Token": [] }],
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
+                  "$ref": "#/components/schemas/UserInfoResponse"
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
-          },
-          "409": {
-            "description": "Provided email already exists",
-            "content": {}
           }
         }
       },
       "post": {
         "tags": ["user"],
-        "summary": "User registration",
+        "summary": "add user's pet",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Registration's object",
+          "description": "add user's pet",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
+                "$ref": "#/components/schemas/UserAddPetRequest"
               }
             }
           }
@@ -180,18 +161,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
+                  "$ref": "#/components/schemas/UserAddPetResponse"
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
-          },
-          "409": {
-            "description": "Provided email already exists",
-            "content": {}
           }
         }
       },
@@ -206,28 +179,24 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
+                "$ref": "#/components/schemas/UserDeletePetRequest"
               }
             }
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
+                  "$ref": "#/components/schemas/UserDeletePetResponse"
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {}
-          },
-          "409": {
-            "description": "Provided email already exists",
+          "404": {
+            "description": "Not found",
             "content": {}
           }
         }
@@ -236,20 +205,226 @@
   },
   "components": {
     "schemas": {
-      "RegistrationRequest": {
+      "UserInfoResponse": {
         "type": "object",
-        "required": ["email", "password"],
         "properties": {
-          "email": {
+          "status": {
             "type": "string",
-            "description": "User's email",
-            "format": "email"
+            "description": "success / no content"
           },
-          "password": {
-            "type": "string",
-            "description": "User's password",
-            "example": "qwerty123"
+          "code": {
+            "type": "number",
+            "description": "statuc code"
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "formate": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "token": {
+                    "type": "string"
+                  },
+                  "avatarURL": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "place": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "formate": "phone"
+                  },
+                  "dateofbirth": {
+                    "type": "string",
+                    "format": "dd.mm.yyyy"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "__v": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "pets": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "date": {
+                      "type": "string",
+                      "format": "dd.mm.yyyy"
+                    },
+                    "breed": {
+                      "type": "string"
+                    },
+                    "comment": {
+                      "type": "string"
+                    },
+                    "owner": {
+                      "type": "string",
+                      "description": "User's unique id"
+                    },
+                    "createdAt": {
+                      "type": "date",
+                      "format": "date"
+                    },
+                    "updatedAt": {
+                      "type": "date",
+                      "format": "date"
+                    }
+                  }
+                }
+              }
+            }
           }
+        },
+        "example": {
+          "status": "success",
+          "code": 200,
+          "result": {
+            "data": {
+              "_id": "63e0c4e3730147ed4e3cf5e9",
+              "email": "vika@gmail.com",
+              "password": "$2b$10$WKu90QOF7tte5X6G/2Uxye7MtbTR1knJLyLY9Wu.op9EMgszEH.nW",
+              "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2UwYzRlMzczMDE0N2VkNGUzY2Y1ZTkiLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA2VDA5OjE0OjExLjk4MloiLCJpYXQiOjE2NzU2NzUwMjd9.LwTFonZ19itrG4oXDa0J9KYINEaNMeyw0Y-jOm5rojQ",
+              "avatarURL": "//www.gravatar.com/avatar/320eab812ab24ef3dbaa2e6dc6e024e0",
+              "name": "vika",
+              "place": "ukraine",
+              "phone": "990333555",
+              "dateofbirth": "01.01.1900",
+              "createdAt": "2023-02-06T09:14:11.982Z",
+              "updatedAt": "2023-02-06T09:17:07.672Z",
+              "__v": 0
+            },
+            "pets": [
+              {
+                "_id": "63e0c535730147ed4e3cf5ed",
+                "name": "petpet",
+                "date": "20.02.2332418",
+                "breed": "cat",
+                "comment": "it's fat and cute. love it",
+                "owner": "63e0c4e3730147ed4e3cf5e9",
+                "createdAt": "2023-02-06T09:15:33.367Z",
+                "updatedAt": "2023-02-06T09:15:33.367Z"
+              }
+            ]
+          }
+        }
+      },
+      "UserAddPetRequest": {
+        "type": "object",
+        "required": ["name", "date", "breed", "comment"],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "description": "Pet's birtday",
+            "format": "dd.mm.yyyy"
+          },
+          "breed": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          }
+        }
+      },
+      "UserAddPetResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "code": {
+            "type": "number",
+            "description": "statuc code"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string",
+                "format": "dd.mm.yyyy"
+              },
+              "breed": {
+                "type": "string"
+              },
+              "comment": {
+                "type": "string"
+              },
+              "owner": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 201,
+          "data": {
+            "name": "fitfit",
+            "date": "27.05.19",
+            "breed": "spaneale",
+            "comment": "it's fat and cute. love it",
+            "owner": "63e0c4e3730147ed4e3cf5e9"
+          }
+        }
+      },
+      "UserDeletePetRequest": {
+        "type": "object",
+        "required": ["pet_id"],
+        "properties": {
+          "pet_id": {
+            "type": "string"
+          }
+        }
+      },
+      "UserDeletePetResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "code": {
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "status": "success",
+          "code": 200,
+          "message": "pet deleted"
         }
       },
       "ServicesResponse": {
@@ -408,9 +583,9 @@
                   "description": "link to the article"
                 },
                 "date": {
-                  "type": "date",
+                  "type": "string",
                   "description": "date of creation the article",
-                  "format": "date"
+                  "format": "dd.mm.yyyy"
                 }
               }
             }
@@ -428,6 +603,23 @@
               "date": "2022-08-13"
             }
           ]
+        }
+      },
+
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
         }
       },
       "RegistrationResponse": {
