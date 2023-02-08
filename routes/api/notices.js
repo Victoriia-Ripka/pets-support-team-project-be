@@ -10,18 +10,8 @@ router.get("/favorite", authMiddleware, ctrl.getFavoritePets);
 router.get("/mynotices", authMiddleware, ctrl.getUserPets);
 router.get("/:noticeId", ctrl.getPetById);
 router.get("/:noticeId/favorite/add", authMiddleware, ctrl.addToFavorite);
-router.get(
-  "/:noticeId/favorite/remove",
-  authMiddleware,
-  ctrl.removeFromFavorite
-);
+router.get("/:noticeId/favorite/remove", authMiddleware, ctrl.removeFromFavorite );
 router.delete("/:noticeId", authMiddleware, ctrl.deletePet);
-router.post(
-  "/",
-  authMiddleware,
-  upload.single("avatar"),
-  noticeValidation,
-  ctrl.addPet
-);
+router.post("/", authMiddleware, upload.single("avatar"), noticeValidation, ctrl.addPet );
 
 module.exports = router;

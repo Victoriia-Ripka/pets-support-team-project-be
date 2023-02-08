@@ -144,12 +144,12 @@ const deletePet = async (req, res) => {
 };
 
 module.exports = {
-  getPetsByCategories,
-  getPetById,
-  addToFavorite,
-  removeFromFavorite,
-  getFavoritePets,
-  addPet,
-  getUserPets,
-  deletePet,
+  getPetsByCategories: ctrlWrapper(getPetsByCategories),
+  getPetById: ctrlWrapper(getPetById),
+  addToFavorite: ctrlWrapper(addToFavorite),
+  removeFromFavorite: ctrlWrapper(removeFromFavorite),
+  getFavoritePets: ctrlWrapper(getFavoritePets),
+  addPet: ctrlWrapper(addPet),
+  getUserPets: ctrlWrapper(getUserPets),
+  deletePet: ctrlWrapper(deletePet),
 };
