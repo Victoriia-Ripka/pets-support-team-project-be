@@ -44,6 +44,11 @@ const logout = async (req, res) => {
     res.status(200).json({ message: 'logout success' });
 };
 
+const refreshUser = async (req, res) => {
+    const { email, name, place, phone, avatarURL } = req.user;
+    res.status(200).json({ email, name, place, phone, avatarURL });
+}
+
 const userUpdate = async (req, res) => {
     const { name, place, phone, dateofbirth } = req.body;
     const width = 233;
@@ -58,4 +63,4 @@ const userUpdate = async (req, res) => {
     res.status(200).json({ status: 'success' });
 }
 
-module.exports = { registration, login, logout, userUpdate };
+module.exports = { registration, login, logout, refreshUser, userUpdate };
