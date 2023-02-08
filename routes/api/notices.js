@@ -5,12 +5,13 @@ const { upload } = require("../../middlewares/uploadMiddleware");
 const { noticeValidation } = require("../../middlewares/validationMiddleware");
 const router = express.Router();
 
-router.get("/", ctrl.getPetsByCategories);
+
 router.get("/favorite", authMiddleware, ctrl.getFavoritePets);
 router.get("/mynotices", authMiddleware, ctrl.getUserPets);
 router.get("/:noticeId", ctrl.getPetById);
 router.get("/:noticeId/favorite/add", authMiddleware, ctrl.addToFavorite);
-router.get("/:noticeId/favorite/remove", authMiddleware, ctrl.removeFromFavorite );
+router.get("/:noticeId/favorite/remove", authMiddleware, ctrl.removeFromFavorite);
+router.get("/:category", ctrl.getPetsByCategories);
 router.delete("/:noticeId", authMiddleware, ctrl.deletePet);
 router.post("/", authMiddleware, upload.single("avatar"), noticeValidation, ctrl.addPet );
 
