@@ -53,6 +53,12 @@ const addToFavorite = async (req, res) => {
     throw httpError(401);
   }
 
+  const doesNoticeExists = await Notices.exists({_id: noticeId});
+
+  if (!doesNoticeExists) {
+    throw httpError(404, "notice doesn't exist")
+  }
+
   try {
     await User.findByIdAndUpdate(
       { _id: id },
@@ -72,7 +78,7 @@ const removeFromFavorite = async (req, res) => {
   if (!id) {
     throw httpError(401);
   }
-
+  
   try {
     await User.findByIdAndUpdate(
       { _id: id },
