@@ -1,7 +1,6 @@
-const { httpError } = require("../helpers");
-const { createAvatar } = require("../helpers/createAvatar");
-const { Notices } = require("../models/notices");
-const { User } = require("../models/user");
+const { httpError, createAvatar } = require("../helpers");
+const { User, Notices } = require("../models");
+const { ctrlWrapper } = require("../helpers");
 
 const selectCategory = {
   category: 1,
@@ -145,12 +144,12 @@ const deletePet = async (req, res) => {
 };
 
 module.exports = {
-  getPetsByCategories,
-  getPetById,
-  addToFavorite,
-  removeFromFavorite,
-  getFavoritePets,
-  addPet,
-  getUserPets,
-  deletePet,
+  getPetsByCategories: ctrlWrapper(getPetsByCategories),
+  getPetById: ctrlWrapper(getPetById),
+  addToFavorite: ctrlWrapper(addToFavorite),
+  removeFromFavorite: ctrlWrapper(removeFromFavorite),
+  getFavoritePets: ctrlWrapper(getFavoritePets),
+  addPet: ctrlWrapper(addPet),
+  getUserPets: ctrlWrapper(getUserPets),
+  deletePet: ctrlWrapper(deletePet),
 };

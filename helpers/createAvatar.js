@@ -13,4 +13,4 @@ const createAvatar = async (imagePath, width, height) => {
     }
 }
 
-module.exports = { createAvatar };
+module.exports = createAvatar;

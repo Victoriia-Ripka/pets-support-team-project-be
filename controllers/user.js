@@ -1,5 +1,4 @@
-const { User } = require("../models/user");
-const { Pets } = require("../models/user_pets");
+const { User, Pets } = require("../models");
 const { ctrlWrapper, httpError } = require("../helpers");
 
 const getUserInfo = async (req, res) => {

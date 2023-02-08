@@ -40,7 +40,6 @@
         "tags": ["auth"],
         "summary": "User registration",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Registration's object",
           "required": true,
@@ -79,7 +78,6 @@
         "tags": ["auth"],
         "summary": "User login to the system",
         "parameters": [],
-        "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Login's object",
           "required": true,
@@ -122,6 +120,30 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserLogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "Refresh user's access",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCurrentResponse"
                 }
               }
             }
@@ -234,6 +256,10 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
           }
         }
       },
@@ -243,7 +269,6 @@
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "add user's pet",
           "required": true,
           "content": {
             "application/json": {
@@ -263,16 +288,23 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
           }
         }
       },
       "delete": {
         "tags": ["user"],
-        "summary": "User registration",
+        "summary": "delete user's pet",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Registration's object",
           "required": true,
           "content": {
             "application/json": {
@@ -293,8 +325,228 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
+          },
           "404": {
             "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/notices": {
+      "get": {
+        "tags": ["notices"],
+        "summary": "get pets by category",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/notices/favorite": {
+      "get": {
+        "tags": ["notices"],
+        "summary": "get favorite pets",
+        "parameters": [],
+        "security": [{ "Bearer Token": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/mynotices": {
+      "get": {
+        "tags": ["notices"],
+        "summary": "get user's pets",
+        "parameters": [],
+        "security": [{ "Bearer Token": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/:noticeId": {
+      "get": {
+        "tags": ["notices"],
+        "summary": "get pet by id",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["notices"],
+        "summary": "delete user's pet",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDeletePetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDeletePetResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/:noticeId/favorite/add": {
+      "get": {
+        "tags": ["notices"],
+        "summary": "add pet to favorite",
+        "parameters": [],
+        "security": [{ "Bearer Token": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices/:noticeId/favorite/remove": {
+      "get": {
+        "tags": ["notices"],
+        "summary": "delete pet from favorite",
+        "parameters": [],
+        "security": [{ "Bearer Token": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserLogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/notices": {
+      "post": {
+        "tags": ["notices"],
+        "summary": "add user's pet",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserAddPetRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserAddPetResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
             "content": {}
           }
         }
@@ -312,7 +564,8 @@
             "format": "email"
           },
           "password": {
-            "type": "string"
+            "type": "string",
+            "example": "1234567"
           },
           "name": {
             "type": "string"
@@ -322,7 +575,8 @@
           },
           "phone": {
             "type": "string",
-            "format": "phone"
+            "format": "phone",
+            "example": "+380661115577"
           }
         }
       },
@@ -333,6 +587,9 @@
             "type": "string",
             "format": "email"
           }
+        },
+        "example": {
+          "email": "user@gmail.com"
         }
       },
       "UserLoginRequest": {
@@ -341,10 +598,12 @@
         "properties": {
           "email": {
             "type": "string",
-            "format": "email"
+            "format": "email",
+            "example": "user@gmail.com"
           },
           "password": {
-            "type": "string"
+            "type": "string",
+            "example": "1234567"
           }
         }
       },
@@ -376,6 +635,9 @@
               }
             }
           }
+        },
+        "example": {
+          "???": "???"
         }
       },
       "UserLogoutResponse": {
@@ -384,12 +646,60 @@
           "message": {
             "type": "string"
           }
+        },
+        "example": {
+          "???": "???"
+        }
+      },
+      "UserCurrentResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "name": {
+            "type": "string"
+          },
+          "place": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "format": "phone"
+          },
+          "avatarURL": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "email": "user@gmail.com",
+          "name": "user",
+          "place": "ukraine",
+          "phone": "+387775556644",
+          "avatarURL": "//www.gravatar.com/avatar/320eab812ab24ef3dbaa2e6dc6e024e0"
         }
       },
       "UserUpdateRequest": {
         "type": "object",
+        "required": ["name", "place", "phone", "dateofbirth"],
         "properties": {
-
+          "name": {
+            "type": "string"
+          },
+          "place": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "format": "phone",
+            "example": "+380661115577"
+          },
+          "dateofbirth": {
+            "type": "string",
+            "format": "date",
+            "example": "???"
+          }
         }
       },
       "UserUpdateResponse": {
@@ -398,6 +708,9 @@
           "status": {
             "type": "string"
           }
+        },
+        "example": {
+          "???": "???"
         }
       },
       "UserInfoResponse": {
@@ -540,7 +853,8 @@
           "date": {
             "type": "string",
             "description": "Pet's birtday",
-            "format": "dd.mm.yyyy"
+            "format": "dd.mm.yyyy",
+            "example": "dd.mm.yyyy"
           },
           "breed": {
             "type": "string"
@@ -557,8 +871,7 @@
             "type": "string"
           },
           "code": {
-            "type": "number",
-            "description": "statuc code"
+            "type": "number"
           },
           "data": {
             "type": "object",
@@ -634,63 +947,58 @@
             "description": "statuc code"
           },
           "data": {
-            "type": "object",
-            "properties": {
-              "result": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "_id": {
-                      "type": "string"
-                    },
-                    "title": {
-                      "type": "string"
-                    },
-                    "url": {
-                      "type": "string"
-                    },
-                    "addressUrl": {
-                      "type": "string"
-                    },
-                    "imageUrl": {
-                      "type": "string"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "workDays": {
-                      "type": "aray",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "isOpen": {
-                            "type": "boolean"
-                          },
-                          "from": {
-                            "type": "string"
-                          },
-                          "to": {
-                            "type": "string"
-                          }
-                        }
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "addressUrl": {
+                  "type": "string"
+                },
+                "imageUrl": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                },
+                "workDays": {
+                  "type": "aray",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "isOpen": {
+                        "type": "boolean"
+                      },
+                      "from": {
+                        "type": "string"
+                      },
+                      "to": {
+                        "type": "string"
                       }
-                    },
-                    "phone": {
-                      "type": "string",
-                      "format": "phone"
-                    },
-                    "email": {
-                      "type": "string",
-                      "format": "email"
-                    },
-                    "createdAt": {
-                      "type": "string"
-                    },
-                    "updatedAt": {
-                      "type": "string"
                     }
                   }
+                },
+                "phone": {
+                  "type": "string",
+                  "format": "phone"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
                 }
               }
             }
@@ -699,49 +1007,47 @@
         "example": {
           "status": "success",
           "code": 200,
-          "data": {
-            "result": [
-              {
-                "_id": "63df9e94fcc94723e1d67a64",
-                "title": "Притулок для бездомних тварин 'Сіріус'",
-                "url": "https://dogcat.com.ua",
-                "addressUrl": "https://goo.gl/maps/iq8NXEUf31EAQCzc6",
-                "imageUrl": "https://storage.googleapis.com/kidslikev2_bucket/pets-support/images/sponsors/frame_287.png",
-                "address": "Fedorivka, Kyiv Oblast, Ukraine, 07372",
-                "workDays": [
-                  {
-                    "isOpen": false
-                  },
-                  {
-                    "isOpen": false
-                  },
-                  {
-                    "isOpen": false
-                  },
-                  {
-                    "isOpen": false
-                  },
-                  {
-                    "isOpen": false
-                  },
-                  {
-                    "isOpen": true,
-                    "from": "11:00",
-                    "to": "16:00"
-                  },
-                  {
-                    "isOpen": true,
-                    "from": "11:00",
-                    "to": "16:00"
-                  }
-                ],
-                "phone": "+380931934069",
-                "email": null,
-                "createdAt": "2023-02-05T12:18:28.742Z",
-                "updatedAt": "2023-02-05T12:18:28.742Z"
-              }
-            ]
-          }
+          "data": [
+            {
+              "_id": "63df9e94fcc94723e1d67a64",
+              "title": "Притулок для бездомних тварин 'Сіріус'",
+              "url": "https://dogcat.com.ua",
+              "addressUrl": "https://goo.gl/maps/iq8NXEUf31EAQCzc6",
+              "imageUrl": "https://storage.googleapis.com/kidslikev2_bucket/pets-support/images/sponsors/frame_287.png",
+              "address": "Fedorivka, Kyiv Oblast, Ukraine, 07372",
+              "workDays": [
+                {
+                  "isOpen": false
+                },
+                {
+                  "isOpen": false
+                },
+                {
+                  "isOpen": false
+                },
+                {
+                  "isOpen": false
+                },
+                {
+                  "isOpen": false
+                },
+                {
+                  "isOpen": true,
+                  "from": "11:00",
+                  "to": "16:00"
+                },
+                {
+                  "isOpen": true,
+                  "from": "11:00",
+                  "to": "16:00"
+                }
+              ],
+              "phone": "+380931934069",
+              "email": null,
+              "createdAt": "2023-02-05T12:18:28.742Z",
+              "updatedAt": "2023-02-05T12:18:28.742Z"
+            }
+          ]
         }
       },
       "NewsResponse": {

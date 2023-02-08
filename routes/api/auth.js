@@ -1,15 +1,23 @@
-const express = require('express');
-const { registration, login, logout, userUpdate, refreshUser } = require('../../controllers/auth');
-const { ctrlWrapper } = require('../../helpers');
-const { authMiddleware } = require('../../middlewares/authMiddleware');
-const { upload } = require('../../middlewares/uploadMiddleware');
-const { userValidation, userUpdateValidation } = require('../../middlewares/validationMiddleware');
+const express = require("express");
+const ctrl = require("../../controllers/auth");
+const { authMiddleware } = require("../../middlewares/authMiddleware");
+const { upload } = require("../../middlewares/uploadMiddleware");
+const {
+  userValidation,
+  userUpdateValidation,
+} = require("../../middlewares/validationMiddleware");
 const router = express.Router();
 
-router.post('/signup', userValidation, ctrlWrapper(registration));
-router.post('/login', ctrlWrapper(login));
-router.get('/current', authMiddleware, ctrlWrapper(refreshUser));
-router.get('/logout', authMiddleware, ctrlWrapper(logout));
-router.patch('/', authMiddleware, upload.single('avatar'), userUpdateValidation, ctrlWrapper(userUpdate));
+router.post("/signup", userValidation, ctrl.registration);
+router.post("/login", ctrl.login);
+router.get("/current", authMiddleware, ctrl.refreshUser);
+router.get("/logout", authMiddleware, ctrl.logout);
+router.patch(
+  "/",
+  authMiddleware,
+  upload.single("avatar"),
+  userUpdateValidation,
+  ctrl.userUpdate
+);
 
-module.exports = {authRouter: router}
+module.exports = router;

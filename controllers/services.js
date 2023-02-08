@@ -14,15 +14,13 @@ const addService = async (req, res) => {
 };
 
 const getAllServices = async (req, res) => {
-  const service = await Service.find();
+  const data = await Service.find();
 
-  if (service) {
+  if (data) {
     res.status(200).json({
       status: "success",
       code: 200,
-      data: {
-        result: service,
-      },
+      data
     });
   } else {
     res.status(204).json({
