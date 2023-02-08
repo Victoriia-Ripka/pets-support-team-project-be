@@ -10,7 +10,7 @@ const servicesRouter = require("./routes/api/services");
 const newsRouter = require("./routes/api/news");
 const authRouter = require('./routes/api/auth');
 const userRouter = require("./routes/api/user");
-const { noticesRouter } = require('./routes/api/notices');
+const noticesRouter = require('./routes/api/notices');
 
 const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'; 

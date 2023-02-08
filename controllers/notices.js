@@ -1,5 +1,6 @@
 const { httpError, createAvatar } = require("../helpers");
 const { User, Notices } = require("../models");
+const { ctrlWrapper } = require("../helpers");
 
 const selectCategory = {
   category: 1,
