@@ -1,7 +1,5 @@
-const { httpError } = require("../helpers");
-const { createAvatar } = require("../helpers/createAvatar");
-const { Notices } = require("../models/notices");
-const { User } = require("../models/user");
+const { httpError, createAvatar } = require("../helpers");
+const { User, Notices } = require("../models");
 
 const selectCategory = {
   category: 1,
