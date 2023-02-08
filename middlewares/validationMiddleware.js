@@ -1,12 +1,13 @@
 const Joi = require('joi');
 const phoneSchema = /^\+380[0-9]{9}$/;
+const passwordSchema = /^[0-9a-zA-Z]{7,32}$/;
 
 const userValidation = async (req, res, next) => {
     const schema = Joi.object({
         name: Joi.string().min(3).max(50).required(),
         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua'] } }).required(),
         place: Joi.string().min(2).max(50).required(),
-        password: Joi.string().min(7).max(32).required(),
+        password: Joi.string().min(7).max(32).required().pattern(passwordSchema),
         phone: Joi.string().pattern(phoneSchema).required(),
     });
 
