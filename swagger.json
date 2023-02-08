@@ -256,6 +256,10 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
           }
         }
       },
@@ -265,7 +269,6 @@
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "add user's pet",
           "required": true,
           "content": {
             "application/json": {
@@ -285,16 +288,23 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
           }
         }
       },
       "delete": {
         "tags": ["user"],
-        "summary": "User registration",
+        "summary": "delete user's pet",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
-          "description": "Registration's object",
           "required": true,
           "content": {
             "application/json": {
@@ -314,6 +324,10 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized (invalid request body)",
+            "content": {}
           },
           "404": {
             "description": "Not found",
@@ -405,6 +419,9 @@
               }
             }
           }
+        },
+        "example": {
+          "???": "???"
         }
       },
       "UserLogoutResponse": {
@@ -413,6 +430,9 @@
           "message": {
             "type": "string"
           }
+        },
+        "example": {
+          "???": "???"
         }
       },
       "UserCurrentResponse": {
@@ -472,6 +492,9 @@
           "status": {
             "type": "string"
           }
+        },
+        "example": {
+          "???": "???"
         }
       },
       "UserInfoResponse": {
@@ -614,7 +637,8 @@
           "date": {
             "type": "string",
             "description": "Pet's birtday",
-            "format": "dd.mm.yyyy"
+            "format": "dd.mm.yyyy",
+            "example": "dd.mm.yyyy"
           },
           "breed": {
             "type": "string"
@@ -631,8 +655,7 @@
             "type": "string"
           },
           "code": {
-            "type": "number",
-            "description": "statuc code"
+            "type": "number"
           },
           "data": {
             "type": "object",
