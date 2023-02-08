@@ -3,110 +3,154 @@ const { createAvatar } = require("../helpers/createAvatar");
 const { Notices } = require("../models/notices");
 const { User } = require("../models/user");
 
-const selectCategory = { category: 1, breed: 1, place: 1, birthday: 1, price: 1, imageUrl: 1}
+const selectCategory = {
+  category: 1,
+  breed: 1,
+  place: 1,
+  birthday: 1,
+  price: 1,
+  imageUrl: 1,
+};
 
 const getPetsByCategories = async (req, res) => {
-    const { category } = req.body;
-    let skip = 0;
-    let limit = 8;
-    if (category !== 'sell' && category !== 'lost-found' && category !== 'in-good-hands') {
-        throw httpError(404, 'bad request');
-    }
-    const pets = await Notices.find({ category: category }).select(selectCategory).limit(limit).skip(skip).sort({createdAt: -1});
-    res.status(200).json(pets);
-}
-
+  const { category } = req.params;
+  let skip = 0;
+  let limit = 8;
+  if (
+    category !== "sell" &&
+    category !== "lost-found" &&
+    category !== "in-good-hands"
+  ) {
+    throw httpError(404, "bad request");
+  }
+  const pets = await Notices.find({ category: category })
+    .select(selectCategory)
+    .limit(limit)
+    .skip(skip)
+    .sort({ createdAt: -1 });
+  res.status(200).json(pets);
+};
 
 const getPetById = async (req, res) => {
-    const { noticeId } = req.params;
-    const pet = await Notices.findById(noticeId).lean();
+  const { noticeId } = req.params;
+  const pet = await Notices.findById(noticeId).lean();
 
-    if (!pet) {
-        throw httpError(404, 'bad request');
-    }
+  if (!pet) {
+    throw httpError(404, "bad request");
+  }
 
-    const owner = await User.findById(pet.owner);
-    pet.email = owner.email;
-    pet.phone = owner.phone;
+  const owner = await User.findById(pet.owner);
+  pet.email = owner.email;
+  pet.phone = owner.phone;
 
-    res.status(200).json(pet);
-}
+  res.status(200).json(pet);
+};
 
 const addToFavorite = async (req, res) => {
-    const { noticeId } = req.params;
-    const { id } = req.user;
+  const { noticeId } = req.params;
+  const { id } = req.user;
 
-    if (!id) {
-        throw httpError(401);
-    }
+  if (!id) {
+    throw httpError(401);
+  }
 
-    try {
-        await User.findByIdAndUpdate({ _id: id }, { $addToSet: { favorites: noticeId } }, { fields: { favorites: 1 } });
-        res.status(200).json({message: 'success'});
-    } catch (error) {
-        throw httpError(404, 'bad request');
-    }
-}
+  try {
+    await User.findByIdAndUpdate(
+      { _id: id },
+      { $addToSet: { favorites: noticeId } },
+      { fields: { favorites: 1 } }
+    );
+    res.status(200).json({ message: "success" });
+  } catch (error) {
+    throw httpError(404, "bad request");
+  }
+};
 
 const removeFromFavorite = async (req, res) => {
-    const { noticeId } = req.params;
-    const { id } = req.user;
+  const { noticeId } = req.params;
+  const { id } = req.user;
 
-    if (!id) {
-        throw httpError(401);
-    }
+  if (!id) {
+    throw httpError(401);
+  }
 
-    try {
-        await User.findByIdAndUpdate({ _id: id }, { $pull: { favorites: noticeId } }, { fields: { favorites: 1 } });
-        res.status(200).json({message: 'success'});
-    } catch (error) {
-        res.status(404).json({ message: 'bad request' });
-    }
-}
+  try {
+    await User.findByIdAndUpdate(
+      { _id: id },
+      { $pull: { favorites: noticeId } },
+      { fields: { favorites: 1 } }
+    );
+    res.status(200).json({ message: "success" });
+  } catch (error) {
+    res.status(404).json({ message: "bad request" });
+  }
+};
 
 const getFavoritePets = async (req, res) => {
-    
-    const { id } = req.user;
-    let skip = 0;
-    let limit = 8;
-    const [pets] = await User.find({ _id: id }, {favorites: 1}).populate({
-        path: "favorites",
-        skip: skip,
-        limit: limit,
-        options: { sort: { created_at: -1 } },
-        select: selectCategory,
-    });
-    res.status(200).json(pets);
-}
+  const { id } = req.user;
+  let skip = 0;
+  let limit = 8;
+  const [pets] = await User.find({ _id: id }, { favorites: 1 }).populate({
+    path: "favorites",
+    skip: skip,
+    limit: limit,
+    options: { sort: { created_at: -1 } },
+    select: selectCategory,
+  });
+  res.status(200).json(pets);
+};
 
 const addPet = async (req, res) => {
-    const { name, dateofbirth, breed, place, price, sex, comments, category } = req.body;
-    const { id } = req.user;
-    const width = 280;
-    const height = 280;
-    const avatarURL = await createAvatar(req.file.path, width, height);
-    const pet = new Notices({ owner: id, name, dateofbirth, breed, place, price, sex, comments, category, avatarURL });
-    await pet.save();
-    res.status(201).json(pet);
-}
+  const { name, dateofbirth, breed, place, price, sex, comments, category } =
+    req.body;
+  const { id } = req.user;
+  const width = 280;
+  const height = 280;
+  const avatarURL = await createAvatar(req.file.path, width, height);
+  const pet = new Notices({
+    owner: id,
+    name,
+    dateofbirth,
+    breed,
+    place,
+    price,
+    sex,
+    comments,
+    category,
+    avatarURL,
+  });
+  await pet.save();
+  res.status(201).json(pet);
+};
 
-const getUserPets = async(req, res) => {
-    const { id } = req.user;
-    let skip = 0;
-    let limit = 8;
-    const pets = await Notices.find({ owner: id }).select(selectCategory).limit(limit).skip(skip).sort({ createdAt: -1 });
-    res.status(200).json(pets);
-}
+const getUserPets = async (req, res) => {
+  const { id } = req.user;
+  let skip = 0;
+  let limit = 8;
+  const pets = await Notices.find({ owner: id })
+    .select(selectCategory)
+    .limit(limit)
+    .skip(skip)
+    .sort({ createdAt: -1 });
+  res.status(200).json(pets);
+};
 
 const deletePet = async (req, res) => {
-    const { noticeId } = req.params;
-    const pet = await Notices.findByIdAndDelete(noticeId);
-    if (!pet) {
-        res.status(404).json({ message: 'bad request' });
-    }
-    res.status(200).json({message: 'success'})
-}
+  const { noticeId } = req.params;
+  const pet = await Notices.findByIdAndDelete(noticeId);
+  if (!pet) {
+    res.status(404).json({ message: "bad request" });
+  }
+  res.status(200).json({ message: "success" });
+};
 
 module.exports = {
-    getPetsByCategories, getPetById, addToFavorite, removeFromFavorite, getFavoritePets, addPet, getUserPets, deletePet
-}
+  getPetsByCategories,
+  getPetById,
+  addToFavorite,
+  removeFromFavorite,
+  getFavoritePets,
+  addPet,
+  getUserPets,
+  deletePet,
+};
