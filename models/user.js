@@ -3,10 +3,11 @@ const bcrypt = require('bcrypt');
 
 const dateOfBirthSchema = /^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/;
 const phoneSchema = /^\+380[0-9]{9}$/;
+const passwordSchema = /^[0-9a-zA-Z]{7,32}$/;
 
 const userSchema = new mongoose.Schema({
     email: { type: String, required: [true, 'Email is required'], unique: true },
-    password: { type: String, required: [true, 'Password is required'] },
+    password: { type: String, required: [true, 'Password is required'], formData: passwordSchema },
     token: { type: String, default: null },
     avatarURL: { type: String, required: true },
     name: { type: String, required: true },
