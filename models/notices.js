@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
-dateOfBirthSchema = /^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/;
+const dateOfBirthSchema = /^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/;
 
 const noticesSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    dateofbirth: { type: String, required: true, formData: dateOfBirthSchema},
-    breed: { type: String, required: true },
+    title: { type: String, required: true },
+    name: { type: String },
+    dateofbirth: { type: String, formData: dateOfBirthSchema},
+    breed: { type: String },
     place: { type: String, required: true },
     price: { type: String, required: true },
     sex: { type: Boolean, required: true },
