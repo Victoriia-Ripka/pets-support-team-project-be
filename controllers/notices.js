@@ -22,7 +22,7 @@ const getPetsByCategories = async (req, res) => {
   ) {
     throw httpError(404, "bad request");
   }
-  const pets = await Notices.find({ category: category })
+  const pets = await Notices.find({ category })
     .select(selectCategory)
     .limit(limit)
     .skip(skip)
