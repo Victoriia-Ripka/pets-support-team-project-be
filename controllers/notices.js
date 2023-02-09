@@ -7,7 +7,7 @@ const selectCategory = {
   title: 1,
   breed: 1,
   place: 1,
-  birthday: 1,
+  dateofbirth: 1,
   price: 1,
   avatarURL: 1,
 };
