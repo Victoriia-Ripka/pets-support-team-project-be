@@ -4,6 +4,7 @@ const { ctrlWrapper } = require("../helpers");
 
 const selectCategory = {
   category: 1,
+  title: 1,
   breed: 1,
   place: 1,
   birthday: 1,
@@ -106,7 +107,7 @@ const getFavoritePets = async (req, res) => {
 };
 
 const addPet = async (req, res) => {
-  const { name, dateofbirth, breed, place, price, sex, comments, category } =
+  const { title, name, dateofbirth, breed, place, price, sex, comments, category } =
     req.body;
   const { id } = req.user;
   const width = 280;
@@ -114,6 +115,7 @@ const addPet = async (req, res) => {
   const avatarURL = await createAvatar(req.file.path, width, height);
   const pet = new Notices({
     owner: id,
+    title,
     name,
     dateofbirth,
     breed,
