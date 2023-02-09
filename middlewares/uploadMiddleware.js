@@ -1,6 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
+const { httpError } = require("../helpers");
 
 const multerConfig = multer.diskStorage({
   destination: path.join(__dirname, '../', 'temp'),
@@ -18,7 +19,7 @@ const fileFilter = (req, file, cb) => {
         cb(null, true);
     }
     else{
-        cb('Unsupported image format', false);
+        cb(httpError(400, 'Unsupported image format'), false);
     }
  }
 
