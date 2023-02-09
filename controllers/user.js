@@ -1,5 +1,5 @@
 const { User, Pets } = require("../models");
-const { ctrlWrapper, httpError } = require("../helpers");
+const { ctrlWrapper, httpError, createAvatar } = require("../helpers");
 
 const getUserInfo = async (req, res) => {
   const { _id } = req.user;
@@ -19,13 +19,25 @@ const getUserInfo = async (req, res) => {
 
 const addPet = async (req, res) => {
   const { _id: owner } = req.user;
-  await Pets.create({ ...req.body, owner });
+
+  const width = 240;
+  const height = 240;
+  let avatarURL = '';
+  if (req?.file?.path) {
+    avatarURL = await createAvatar(req.file.path, width, height);
+  } else {
+    res.status(400).json({ message: 'Avatar is required' });
+  }
+  
+
+  await Pets.create({ ...req.body, owner, avatarURL });
 
   res.status(201).json({
     status: "success",
     code: 201,
     data: {
       ...req.body,
+      avatarURL,
       owner,
     },
   });

@@ -34,6 +34,10 @@ const petsSchema = new Schema(
       ref: "users",
       required: true,
     },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
