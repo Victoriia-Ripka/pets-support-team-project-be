@@ -5,7 +5,6 @@ const dateOfBirthSchema = /^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:
 
 const userValidation = async (req, res, next) => {
     const schema = Joi.object({
-        title: Joi.string().min(8).max(80).required(),
         name: Joi.string().min(3).max(30).required(),
         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua'] } }).max(40).required(),
         place: Joi.string().min(2).max(30).required(),
