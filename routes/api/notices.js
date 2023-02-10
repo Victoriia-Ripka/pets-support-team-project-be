@@ -9,10 +9,10 @@ const router = express.Router();
 router.get("/favorite", authMiddleware, ctrl.getFavoritePets);
 router.get("/mynotices", authMiddleware, ctrl.getUserPets);
 router.get("/:category", ctrl.getPetsByCategories);
-router.get("/:noticeId/favorite/add", authMiddleware, ctrl.addToFavorite);
-router.get("/:noticeId/favorite/remove", authMiddleware, ctrl.removeFromFavorite);
-router.get("/:noticeId", ctrl.getPetById);
-router.delete("/:noticeId", authMiddleware, ctrl.deletePet);
+router.get("/favorite/add/:noticeId", authMiddleware, ctrl.addToFavorite);
+router.get("/favorite/remove/:noticeId", authMiddleware, ctrl.removeFromFavorite);
+router.get("/pet/:noticeId", ctrl.getPetById);
+router.delete("/pet/:noticeId", authMiddleware, ctrl.deletePet);
 router.post("/", authMiddleware, upload.single("avatar"), noticeValidation, ctrl.addPet );
 
 module.exports = router;

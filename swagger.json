@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "2.0.0",
+    "version": "2.0.1",
     "title": "Petly back-end",
     "description": "i have to write some description here",
     "license": {
@@ -398,7 +398,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserPetsResponse"
+                  "$ref": "#/components/schemas/UserGetPetResponse"
                 }
               }
             }
@@ -410,7 +410,7 @@
         }
       }
     },
-    "/notices/:noticeId": {
+    "/notices/pet/:noticeId": {
       "get": {
         "tags": ["notices"],
         "summary": "get pet by id",
@@ -430,19 +430,9 @@
       },
       "delete": {
         "tags": ["notices"],
-        "summary": "delete user's pet",
+        "summary": "delete pet from notices (authorized user)",
         "parameters": [],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserDeletePetResponse"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -465,7 +455,7 @@
         }
       }
     },
-    "/notices/:noticeId/favorite/add": {
+    "/notices/favorite/add/:noticeId": {
       "get": {
         "tags": ["notices"],
         "summary": "add pet to favorite",
@@ -493,7 +483,7 @@
         }
       }
     },
-    "/notices/:noticeId/favorite/remove": {
+    "/notices/favorite/remove/:noticeId": {
       "get": {
         "tags": ["notices"],
         "summary": "delete pet from favorite",
@@ -524,13 +514,13 @@
     "/notices": {
       "post": {
         "tags": ["notices"],
-        "summary": "add user's pet",
+        "summary": "add pet to notises (authorized user)",
         "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/UserAddPetNoticeRequest"
               }
@@ -639,6 +629,10 @@
               },
               "avatarURL": {
                 "type": "string"
+              },
+              "dayofbirth": {
+                "type": "date",
+                "format": "dd.mm.yyyy"
               }
             }
           }
@@ -880,7 +874,7 @@
           "comment": {
             "type": "string"
           },
-          "file": {
+          "avatar": {
             "type": "string",
             "description": "Pet's photo",
             "format": "binary"
@@ -1168,13 +1162,274 @@
           }
         ]
       },
-      "UserFavPetsResponse": {},
-      "UserGetPetResponse": {},
-      "UserDeletePetFromNoticeResponse": {},
-      "AddToFavResponse": {},
-      "DeleteFromFavResponse": {},
-      "UserAddPetNoticeRequest": {},
-      "UserAddPetNoticeResponse": {}
+      "UserFavPetsResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "favorites": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "dateofbirth": {
+                  "type": "string",
+                  "format": "dd.mm.yyyy"
+                },
+                "breed": {
+                  "type": "string"
+                },
+                "place": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "avatarURL": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "example": {
+          "_id": "63e619f2e74bc9b81261d20a",
+          "favorites": [
+            {
+              "_id": "63e0de50a1fcb3ae1efe9923",
+              "dateofbirth": "01.01.2020",
+              "breed": "monkey",
+              "place": "street",
+              "price": "1$",
+              "category": "sell",
+              "avatarURL": "https://res.cloudinary.com/dznsyhppg/image/upload/v1675681361/54edcc60-d697-4e94-b3a8-91242d12e1b0.jpg"
+            }
+          ]
+        }
+      },
+      "UserGetPetResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "dateofbirth": {
+              "type": "string",
+              "format": "dd.mm.yyyy"
+            },
+            "breed": {
+              "type": "string"
+            },
+            "place": {
+              "type": "string"
+            },
+            "price": {
+              "type": "string"
+            },
+            "sex": {
+              "type": "boolean",
+              "description": "false - male"
+            },
+            "comments": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "avatarURL": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "__v": {
+              "type": "integer"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "phone": {
+              "type": "string",
+              "format": "phone"
+            }
+          }
+        },
+        "example": [
+          {
+            "_id": "63e516fd43f9ec6789cbd134",
+            "title": "cute doggy looking for home",
+            "name": "doggy",
+            "dateofbirth": "01.01.2021",
+            "breed": "monkey",
+            "place": "street",
+            "price": "1$",
+            "sex": false,
+            "comments": "Dogs are man's best friend, but here are some facts you may not know about dogs. 15 interesting facts about your dog that may have not known.",
+            "category": "sell",
+            "avatarURL": "https://res.cloudinary.com/dznsyhppg/image/upload/v1675958013/a712e136-1fe6-4b41-94af-56ea94d854bc.jpg",
+            "owner": "63e49ecb0012cdf5c3c34f85",
+            "createdAt": "2023-02-09T15:53:33.716Z",
+            "updatedAt": "2023-02-09T15:53:33.716Z",
+            "__v": 0,
+            "email": "mistake@mail.com",
+            "phone": "+380121231234"
+          }
+        ]
+      },
+      "UserDeletePetFromNoticeResponse": {
+        "type": "string",
+        "example": {
+          "message": "success"
+        }
+      },
+      "AddToFavResponse": {
+        "type": "string",
+        "example": {
+          "message": "success"
+        }
+      },
+      "DeleteFromFavResponse": {
+        "type": "string",
+        "example": {
+          "message": "success"
+        }
+      },
+      "UserAddPetNoticeRequest": {
+        "type": "object",
+        "required": ["title", "place", "price", "sex", "category"],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "place": {
+            "type": "string"
+          },
+          "dateofbirth": {
+            "type": "string",
+            "format": "dd.mm.yyyy"
+          },
+          "breed": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          },
+          "sex": {
+            "type": "boolean",
+            "description": "false - male"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "description": "sell'/lost-found/in-good-hands"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "Pet's photo",
+            "format": "binary"
+          }
+        }
+      },
+      "UserAddPetNoticeResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "dateofbirth": {
+              "type": "string",
+              "format": "dd.mm.yyyy"
+            },
+            "breed": {
+              "type": "string"
+            },
+            "place": {
+              "type": "string"
+            },
+            "price": {
+              "type": "string"
+            },
+            "sex": {
+              "type": "boolean",
+              "description": "false - male"
+            },
+            "comments": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string",
+              "description": "sell'/lost-found/in-good-hands"
+            },
+            "avatarURL": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "_id": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "__v": {
+              "type": "integer"
+            }
+          }
+        },
+        "example": {
+          "title": "found sweet cat",
+          "name": "cat",
+          "dateofbirth": "11.02.2021",
+          "breed": "doesn't have",
+          "place": "Kyiv",
+          "price": "-",
+          "sex": false,
+          "comments": "GOOD CAT",
+          "category": "lost-found",
+          "avatarURL": "https://res.cloudinary.com/dznsyhppg/image/upload/v1676047022/01c83e25-678f-45df-95eb-dc9412c11dab.jpg",
+          "owner": "63e619f2e74bc9b81261d20a",
+          "_id": "63e672af5eccf90307e977cd",
+          "createdAt": "2023-02-10T16:37:03.465Z",
+          "updatedAt": "2023-02-10T16:37:03.465Z",
+          "__v": 0
+        }
+      }
     },
     "securitySchemes": {
       "Bearer": {
