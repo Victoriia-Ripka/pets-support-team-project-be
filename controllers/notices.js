@@ -21,7 +21,7 @@ const getPetsByCategories = async (req, res) => {
     category !== "lost-found" &&
     category !== "in-good-hands"
   ) {
-    throw httpError(404, "bad request");
+    throw httpError(400, "bad request");
   }
   const pets = await Notices.find({ category })
     .select(selectCategory)
