@@ -644,7 +644,14 @@
           }
         },
         "example": {
-          "???": "???"
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2U2MTlmMmU3NGJjOWI4MTI2MWQyMGEiLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTEwVDEwOjE4OjI2LjQ0MloiLCJpYXQiOjE2NzYwMjU3ODR9.Uxa-7jheuPQeHHeiemwAC-SBKH5PE7bbRalGGD1S7jE",
+          "user": {
+            "email": "ghfxg@gmail.com",
+            "name": "dsffdsg",
+            "place": "dsfg",
+            "phone": "+380995557766",
+            "avatarURL": "//www.gravatar.com/avatar/14bc5d9db690fe958f6f59bc59149038"
+          }
         }
       },
       "UserLogoutResponse": {
@@ -655,7 +662,7 @@
           }
         },
         "example": {
-          "???": "???"
+          "message": "logout success"
         }
       },
       "UserCurrentResponse": {
@@ -689,7 +696,6 @@
       },
       "UserUpdateRequest": {
         "type": "object",
-        "required": ["name", "place", "phone", "dateofbirth"],
         "properties": {
           "name": {
             "type": "string"
@@ -705,7 +711,12 @@
           "dateofbirth": {
             "type": "string",
             "format": "date",
-            "example": "???"
+            "example": "11.12.2000"
+          },
+          "avatar": {
+            "type": "string",
+            "format": "binary",
+            "description": "user's photo (file png/jpg) "
           }
         }
       },
@@ -717,7 +728,7 @@
           }
         },
         "example": {
-          "???": "???"
+          "status": "success"
         }
       },
       "UserInfoResponse": {
