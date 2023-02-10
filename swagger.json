@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.0",
+    "version": "2.0.0",
     "title": "Petly back-end",
     "description": "i have to write some description here",
     "license": {
@@ -11,7 +11,10 @@
   },
   "consumes": ["application/json"],
   "produces": ["application/json"],
-  "servers": [{ "url": "http://localhost:3000/api" }],
+  "servers": [
+    { "url": "https://petly-5jqe.onrender.com/api" },
+    { "url": "http://localhost:3000/api" }
+  ],
   "tags": [
     {
       "name": "auth",
@@ -271,7 +274,7 @@
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/UserAddPetRequest"
               }
@@ -336,10 +339,10 @@
         }
       }
     },
-    "/notices/notices": {
+    "/notices/:category": {
       "get": {
         "tags": ["notices"],
-        "summary": "get pets by category",
+        "summary": "get pets by category (sell / lost-found / in-good-hands)",
         "parameters": [],
         "responses": {
           "200": {
@@ -347,22 +350,22 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserLogoutResponse"
+                  "$ref": "#/components/schemas/PetsByCategoriesResponse"
                 }
               }
             }
           },
-          "401": {
-            "description": "Unauthorized (invalid request body)",
+          "400": {
+            "description": "Bad Request",
             "content": {}
           }
         }
       }
     },
-    "/notices/notices/favorite": {
+    "/notices/favorite": {
       "get": {
         "tags": ["notices"],
-        "summary": "get favorite pets",
+        "summary": "get favorite user's pets",
         "parameters": [],
         "security": [{ "Bearer Token": [] }],
         "responses": {
@@ -371,7 +374,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserLogoutResponse"
+                  "$ref": "#/components/schemas/UserFavPetsResponse"
                 }
               }
             }
@@ -395,7 +398,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserLogoutResponse"
+                  "$ref": "#/components/schemas/UserPetsResponse"
                 }
               }
             }
@@ -418,14 +421,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserLogoutResponse"
+                  "$ref": "#/components/schemas/UserGetPetResponse"
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized (invalid request body)",
-            "content": {}
           }
         }
       },
@@ -439,7 +438,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserDeletePetRequest"
+                "$ref": "#/components/schemas/UserDeletePetResponse"
               }
             }
           }
@@ -450,7 +449,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDeletePetResponse"
+                  "$ref": "#/components/schemas/UserDeletePetFromNoticeResponse"
                 }
               }
             }
@@ -478,13 +477,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserLogoutResponse"
+                  "$ref": "#/components/schemas/AddToFavResponse"
                 }
               }
             }
           },
           "401": {
             "description": "Unauthorized (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
             "content": {}
           }
         }
@@ -502,13 +505,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserLogoutResponse"
+                  "$ref": "#/components/schemas/DeleteFromFavResponse"
                 }
               }
             }
           },
           "401": {
             "description": "Unauthorized (invalid request body)",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
             "content": {}
           }
         }
@@ -525,7 +532,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserAddPetRequest"
+                "$ref": "#/components/schemas/UserAddPetNoticeRequest"
               }
             }
           }
@@ -536,7 +543,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAddPetResponse"
+                  "$ref": "#/components/schemas/UserAddPetNoticeResponse"
                 }
               }
             }
@@ -845,7 +852,7 @@
       },
       "UserAddPetRequest": {
         "type": "object",
-        "required": ["name", "date", "breed", "comment"],
+        "required": ["name", "date", "breed", "comment", "file"],
         "properties": {
           "name": {
             "type": "string"
@@ -861,6 +868,11 @@
           },
           "comment": {
             "type": "string"
+          },
+          "file": {
+            "type": "string",
+            "description": "Pet's photo",
+            "format": "binary"
           }
         }
       },
@@ -890,6 +902,9 @@
                 "type": "string"
               },
               "owner": {
+                "type": "string"
+              },
+              "avatarURL": {
                 "type": "string"
               }
             }
@@ -1105,7 +1120,50 @@
             }
           ]
         }
-      }
+      },
+      "PetsByCategoriesResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "breed": {
+              "type": "string"
+            },
+            "place": {
+              "type": "string"
+            },
+            "price": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            }
+          }
+        },
+        "example": [
+          {
+            "_id": "63e49f5c953a94175d3e078d",
+            "title": "cute doggy looking for home",
+            "breed": "monkey",
+            "place": "street",
+            "price": "1$",
+            "category": "sell"
+          }
+        ]
+      },
+      "UserFavPetsResponse": {},
+      "UserGetPetResponse": {},
+      "UserDeletePetFromNoticeResponse": {},
+      "AddToFavResponse": {},
+      "DeleteFromFavResponse": {},
+      "UserAddPetNoticeRequest": {},
+      "UserAddPetNoticeResponse": {}
     },
     "securitySchemes": {
       "Bearer": {
