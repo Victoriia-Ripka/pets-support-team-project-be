@@ -16,7 +16,7 @@ const authMiddleware = async (req, res, next) => {
         const user = jwt.decode(token, process.env.JWT_SECRET);
         const userExists = await User.findById(user._id);
         if (!userExists || !userExists.token || String(token) !== String(userExists.token)) {
-            next()
+            next(httpError(401));
         }
         req.token = token;
         req.user = userExists;
