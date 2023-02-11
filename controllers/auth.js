@@ -74,7 +74,7 @@ const userUpdate = async (req, res) => {
   if (!user) {
     throw httpError(401);
   }
-  res.status(200).json(user.name, user.place, user.phone, user.dateofbirth, user.avatarURL);
+  res.status(200).json({name: user.name, place: user.place, phone: user.phone, dateofbirth: user.dateofbirth, avatarURL: user.avatarURL});
 };
 
 module.exports = {
