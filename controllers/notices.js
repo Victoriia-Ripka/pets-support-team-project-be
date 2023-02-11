@@ -103,7 +103,7 @@ const getFavoritePets = async (req, res) => {
     options: { sort: { created_at: -1 } },
     select: selectCategory,
   });
-  res.status(200).json(pets);
+  res.status(200).json(pets["favorites"]);
 };
 
 const addPet = async (req, res) => {
