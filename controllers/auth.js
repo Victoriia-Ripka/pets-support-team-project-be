@@ -54,8 +54,8 @@ const logout = async (req, res) => {
 };
 
 const refreshUser = async (req, res) => {
-  const { email, name, place, phone, avatarURL } = req.user;
-  res.status(200).json({ email, name, place, phone, avatarURL });
+  const { email, name, place, phone, avatarURL, dateofbirth } = req.user;
+  res.status(200).json({ email, name, place, phone, avatarURL, dateofbirth });
 };
 
 const userUpdate = async (req, res) => {
