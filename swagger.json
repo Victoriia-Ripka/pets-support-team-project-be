@@ -630,7 +630,7 @@
               "avatarURL": {
                 "type": "string"
               },
-              "dayofbirth": {
+              "dateofbirth": {
                 "type": "date",
                 "format": "dd.mm.yyyy"
               }
@@ -644,7 +644,8 @@
             "name": "dsffdsg",
             "place": "dsfg",
             "phone": "+380995557766",
-            "avatarURL": "//www.gravatar.com/avatar/14bc5d9db690fe958f6f59bc59149038"
+            "avatarURL": "//www.gravatar.com/avatar/14bc5d9db690fe958f6f59bc59149038",
+            "dateofbirth": "01.01.1900"
           }
         }
       },
