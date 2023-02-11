@@ -10,7 +10,7 @@ const createVarifyEmail = (email, verificationToken) => {
   return {
     to: email,
     subject: "Petly. Verify email",
-    html: `<h2>Thank you for registration</h2><a targt="_blank" href="${process.env.BASE_URL}/api/auth/verify/${verificationToken}">Please, confirm your email.</a><p>Have a nice day</p>`,
+    html: `<h2>Thank you for registration</h2><a targt="_blank" href="${process.env.BASE_URL}/api/users/verify/${verificationToken}">Please, confirm your email.</a><p>Have a nice day</p>`,
   };
 };
 
