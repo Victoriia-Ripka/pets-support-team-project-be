@@ -1,9 +1,17 @@
 const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
 var jwt = require("jsonwebtoken");
-const { createAvatar, httpError, ctrlWrapper } = require("../helpers");
+const { createAvatar, httpError, ctrlWrapper, sendEmail } = require("../helpers");
 const { User } = require("../models");
 require("dotenv").config();
+
+const createVarifyEmail = (email, verificationToken) => {
+  return {
+    to: email,
+    subject: "Petly. Verify email",
+    html: `<h2>Thank you for registration</h2><a targt="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Please, confirm your email.</a><p>Have a nice day</p>`,
+  };
+};
 
 const registration = async (req, res) => {
   const { email, password, name, place, phone } = req.body;
