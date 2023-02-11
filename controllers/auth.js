@@ -62,7 +62,10 @@ const userUpdate = async (req, res) => {
   const { name, place, phone, dateofbirth } = req.body;
   const width = 233;
   const height = 233;
-  const avatarURL = await createAvatar(req.file.path, width, height);
+  let avatarURL = undefined;
+  if (req?.file?.path) {
+    avatarURL = await createAvatar(req.file.path, width, height);
+  }
 
   const { _id } = req.user;
   const user = await User.findByIdAndUpdate(_id, {
