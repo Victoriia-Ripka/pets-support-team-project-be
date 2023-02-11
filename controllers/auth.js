@@ -70,7 +70,7 @@ const userUpdate = async (req, res) => {
   const { _id } = req.user;
   const user = await User.findByIdAndUpdate(_id, {
     $set: { name, place, phone, dateofbirth, avatarURL },
-  });
+  },  {new: true});
   if (!user) {
     throw httpError(401);
   }
