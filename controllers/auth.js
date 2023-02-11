@@ -71,7 +71,7 @@ const userUpdate = async (req, res) => {
   if (!user) {
     throw httpError(401);
   }
-  res.status(200).json({ status: "success" });
+  res.status(200).json(user.name, user.place, user.phone, user.dateofbirth, user.avatarURL);
 };
 
 module.exports = {
