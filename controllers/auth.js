@@ -42,7 +42,7 @@ const login = async (req, res) => {
       place: user.place,
       phone: user.phone,
       avatarURL: user.avatarURL,
-      dayofbirth: user.dateofbirth,
+      dateofbirth: user.dateofbirth,
     },
   });
 };
