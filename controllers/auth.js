@@ -96,7 +96,8 @@ const login = async (req, res) => {
       _id: user._id,
       createdAt: user.createdAt,
     },
-    process.env.JWT_SECRET
+    process.env.JWT_SECRET,
+    {expiresIn: "23h"}
   );
   await User.findByIdAndUpdate(user._id, { token });
   res.status(200).json({
