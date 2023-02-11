@@ -679,6 +679,10 @@
           },
           "avatarURL": {
             "type": "string"
+          },
+          "dateofbirth": {
+            "type": "date",
+            "format": "dd.mm.yyyy"
           }
         },
         "example": {
