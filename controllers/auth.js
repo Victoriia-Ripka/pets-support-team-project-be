@@ -108,7 +108,7 @@ const login = async (req, res) => {
       place: user.place,
       phone: user.phone,
       avatarURL: user.avatarURL,
-      dayofbirth: user.dateofbirth,
+      dateofbirth: user.dateofbirth,
     },
   });
 };
@@ -120,24 +120,27 @@ const logout = async (req, res) => {
 };
 
 const refreshUser = async (req, res) => {
-  const { email, name, place, phone, avatarURL } = req.user;
-  res.status(200).json({ email, name, place, phone, avatarURL });
+  const { email, name, place, phone, avatarURL, dateofbirth } = req.user;
+  res.status(200).json({ email, name, place, phone, avatarURL, dateofbirth });
 };
 
 const userUpdate = async (req, res) => {
   const { name, place, phone, dateofbirth } = req.body;
   const width = 233;
   const height = 233;
-  const avatarURL = await createAvatar(req.file.path, width, height);
+  let avatarURL = undefined;
+  if (req?.file?.path) {
+    avatarURL = await createAvatar(req.file.path, width, height);
+  }
 
   const { _id } = req.user;
   const user = await User.findByIdAndUpdate(_id, {
     $set: { name, place, phone, dateofbirth, avatarURL },
-  });
+  },  {new: true});
   if (!user) {
     throw httpError(401);
   }
-  res.status(200).json({ status: "success" });
+  res.status(200).json({name: user.name, place: user.place, phone: user.phone, dateofbirth: user.dateofbirth, avatarURL: user.avatarURL});
 };
 
 module.exports = {

@@ -1250,56 +1250,45 @@
         ]
       },
       "UserFavPetsResponse": {
-        "type": "object",
-        "properties": {
-          "_id": {
-            "type": "string"
-          },
-          "favorites": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "_id": {
-                  "type": "string"
-                },
-                "dateofbirth": {
-                  "type": "string",
-                  "format": "dd.mm.yyyy"
-                },
-                "breed": {
-                  "type": "string"
-                },
-                "place": {
-                  "type": "string"
-                },
-                "price": {
-                  "type": "string"
-                },
-                "category": {
-                  "type": "string"
-                },
-                "avatarURL": {
-                  "type": "string"
-                }
-              }
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "dateofbirth": {
+              "type": "string",
+              "format": "dd.mm.yyyy"
+            },
+            "breed": {
+              "type": "string"
+            },
+            "place": {
+              "type": "string"
+            },
+            "price": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "avatarURL": {
+              "type": "string"
             }
           }
         },
-        "example": {
-          "_id": "63e619f2e74bc9b81261d20a",
-          "favorites": [
-            {
-              "_id": "63e0de50a1fcb3ae1efe9923",
-              "dateofbirth": "01.01.2020",
-              "breed": "monkey",
-              "place": "street",
-              "price": "1$",
-              "category": "sell",
-              "avatarURL": "https://res.cloudinary.com/dznsyhppg/image/upload/v1675681361/54edcc60-d697-4e94-b3a8-91242d12e1b0.jpg"
-            }
-          ]
-        }
+        "example": [
+          {
+            "_id": "63e0de50a1fcb3ae1efe9923",
+            "dateofbirth": "01.01.2020",
+            "breed": "monkey",
+            "place": "street",
+            "price": "1$",
+            "category": "sell",
+            "avatarURL": "https://res.cloudinary.com/dznsyhppg/image/upload/v1675681361/54edcc60-d697-4e94-b3a8-91242d12e1b0.jpg"
+          }
+        ]
       },
       "UserGetPetResponse": {
         "type": "array",
