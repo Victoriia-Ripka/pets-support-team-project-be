@@ -42,7 +42,7 @@ const noticeValidation = async (req, res, next) => {
         place: Joi.string().min(2).max(30).required(),
         dateofbirth: Joi.string().pattern(dateOfBirthSchema).allow(""),
         breed: Joi.string().min(2).max(30),
-        price: Joi.string().min(1).max(12).required(),
+        price: Joi.string().min(1).max(12),
         sex: Joi.boolean().required(),
         comments: Joi.string().min(0).max(800),
         category: Joi.string().required().valid('sell', 'lost-found', 'in-good-hands')

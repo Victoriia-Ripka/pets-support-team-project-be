@@ -109,14 +109,15 @@ const getFavoritePets = async (req, res) => {
 const addPet = async (req, res) => {
   const { title, name, dateofbirth, breed, place, price, sex, comments, category } =
     req.body;
+  if (category === 'sell' & !price) {
+    res.status(400).json({ message: 'Price is required' });
+  }
   const { id } = req.user;
   const width = 280;
   const height = 280;
-  let avatarURL = '';
+  let avatarURL = undefined;
   if (req?.file?.path) {
     avatarURL = await createAvatar(req.file.path, width, height);
-  } else {
-    res.status(400).json({ message: 'Avatar is required' });
   }
   const pet = new Notices({
     owner: id,

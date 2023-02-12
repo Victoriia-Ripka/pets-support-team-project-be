@@ -22,7 +22,7 @@ const addPet = async (req, res) => {
 
   const width = 240;
   const height = 240;
-  let avatarURL = '';
+  let avatarURL = undefined;
   if (req?.file?.path) {
     avatarURL = await createAvatar(req.file.path, width, height);
   } else {
