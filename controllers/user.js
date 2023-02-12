@@ -5,7 +5,7 @@ const getUserInfo = async (req, res) => {
   const { _id } = req.user;
 
   const data = await User.findOne({ _id });
-  const pets = await Pets.find({ owner: _id });
+  const pets = await Pets.find({ owner: _id }).sort({ createdAt: -1 });
 
   res.status(200).json({
     status: "success",
