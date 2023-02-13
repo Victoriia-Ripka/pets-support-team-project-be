@@ -76,7 +76,40 @@
         }
       }
     },
-    "/verify/:verificationToken": {
+    "/users/new_password": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "User forgot password",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserNewPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNewPasswordResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/verify/:verificationToken": {
       "get": {
         "tags": ["auth"],
         "summary": "User's verifing email",
@@ -99,7 +132,7 @@
         }
       }
     },
-    "/verify": {
+    "/users/verify": {
       "post": {
         "tags": ["auth"],
         "summary": "User's verifing email",
@@ -668,6 +701,25 @@
           "type": "string",
           "example": {
             "message": "Verification email sent"
+          }
+        }
+      },
+      "UserNewPasswordRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "UserNewPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "type": "string",
+          "example": {
+            "message": "Password updated successfuly"
           }
         }
       },

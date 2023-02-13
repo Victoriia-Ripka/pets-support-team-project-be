@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema(
       formData: passwordSchema,
     },
     token: { type: String, default: null },
+    refreshToken: [String],
     avatarURL: { type: String, required: true },
     name: { type: String, required: true },
     place: { type: String, required: true },
