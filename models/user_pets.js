@@ -25,7 +25,6 @@ const petsSchema = new Schema(
     },
     comment: {
       type: String,
-      minlength: 8,
       maxlength: 800,
     },
     owner: {
@@ -47,7 +46,7 @@ const AddPet = Joi.object({
   date: Joi.string().required().pattern(dateOfBirthSchema),
   // date: Joi.date().format("DD.MM.YYYY").raw().required(),
   breed: Joi.string().min(2).max(30).required(),
-  comment: Joi.string().min(8).max(800).required(),
+  comment: Joi.string().max(800),
 });
 
 const schemas = {
