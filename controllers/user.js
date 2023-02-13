@@ -30,13 +30,17 @@ const addPet = async (req, res) => {
   }
   
 
-  await Pets.create({ ...req.body, owner, avatarURL });
+  const newPet = await Pets.create({ ...req.body, owner, avatarURL });
 
   res.status(201).json({
     status: "success",
     code: 201,
     data: {
-      ...req.body,
+      name: newPet.name,
+      date: newPet.date,
+      breed: newPet.breed,
+      comment: newPet.comment,
+      _id: newPet._id,
       avatarURL,
       owner,
     },
