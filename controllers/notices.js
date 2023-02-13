@@ -54,7 +54,8 @@ const addToFavorite = async (req, res) => {
     throw httpError(401);
   }
 
-  const doesNoticeExists = await Notices.exists({_id: noticeId});
+  const doesNoticeExists = await Notices.findById({ _id: noticeId });
+  
 
   if (!doesNoticeExists) {
     throw httpError(404, "notice doesn't exist")
@@ -66,7 +67,7 @@ const addToFavorite = async (req, res) => {
       { $addToSet: { favorites: noticeId } },
       { fields: { favorites: 1 } }
     );
-    res.status(200).json({ message: "success" });
+    res.status(200).json(doesNoticeExists);
   } catch (error) {
     throw httpError(404, "bad request");
   }
@@ -86,7 +87,7 @@ const removeFromFavorite = async (req, res) => {
       { $pull: { favorites: noticeId } },
       { fields: { favorites: 1 } }
     );
-    res.status(200).json({ message: "success" });
+    res.status(200).json({ id: noticeId });
   } catch (error) {
     res.status(404).json({ message: "bad request" });
   }
