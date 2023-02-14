@@ -114,6 +114,7 @@ const addPet = async (req, res) => {
   if (category === 'sell' & !price) {
     res.status(400).json({ message: 'Price is required' });
   }
+  const parseIntPrice = parseInt(price, 10);
   const { id } = req.user;
   const width = 280;
   const height = 280;
@@ -128,7 +129,7 @@ const addPet = async (req, res) => {
     dateofbirth,
     breed,
     place,
-    price,
+    price: parseIntPrice,
     sex,
     comments,
     category,
