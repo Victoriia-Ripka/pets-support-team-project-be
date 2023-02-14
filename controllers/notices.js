@@ -10,6 +10,7 @@ const selectCategory = {
   dateofbirth: 1,
   price: 1,
   avatarURL: 1,
+  owner: 1,
 };
 
 const getPetsByCategories = async (req, res) => {
