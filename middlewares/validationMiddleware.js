@@ -26,8 +26,8 @@ const userValidation = async (req, res, next) => {
 const userUpdateValidation = async (req, res, next) => {
     const schema = Joi.object({
         name: Joi.string().min(3).max(30).pattern(nameRules),
-        place: Joi.string().min(2).max(30),
-        phone: Joi.string().pattern(phoneSchema).pattern(regionRules).pattern(regionRulesOnlyLetters),
+        place: Joi.string().min(2).max(30).pattern(regionRules).pattern(regionRulesOnlyLetters),
+        phone: Joi.string().pattern(phoneSchema),
         dateofbirth: Joi.string().pattern(dateOfBirthSchema).allow(""),
         avatarURL: Joi.string(),
     });
