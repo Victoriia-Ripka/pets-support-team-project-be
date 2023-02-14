@@ -25,9 +25,10 @@ const addPet = async (req, res) => {
   let avatarURL = undefined;
   if (req?.file?.path) {
     avatarURL = await createAvatar(req.file.path, width, height);
-  } else {
-    res.status(400).json({ message: 'Avatar is required' });
   }
+  // else {
+  //   res.status(400).json({ message: 'Avatar is required' });
+  // }
   
 
   const newPet = await Pets.create({ ...req.body, owner, avatarURL });
