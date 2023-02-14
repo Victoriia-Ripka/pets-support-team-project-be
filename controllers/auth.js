@@ -44,6 +44,17 @@ const registration = async (req, res) => {
   res.status(201).json({ email });
 };
 
+const googleAuth = async (req, res) => {
+  const { id: _id } = req.user;
+  const token = jwt.sign(
+    { id },
+    process.env.JWT_SECRET
+    // { expiresIn: "23h" }
+  );
+  await User.findByIdAndUpdate(_id, { token });
+  res.redirect(`${process.env.BASE_URL}?token=${token}`)
+};
+
 const verify = async (req, res) => {
   const { verificationToken } = req.params;
 
@@ -108,11 +119,8 @@ const login = async (req, res) => {
   }
 
   const token = jwt.sign(
-    {
-      _id: user._id,
-      createdAt: user.createdAt,
-    },
-    process.env.JWT_SECRET,
+    { _id: user._id },
+    process.env.JWT_SECRET
     // { expiresIn: "23h" }
   );
   await User.findByIdAndUpdate(user._id, { token });
@@ -300,7 +308,8 @@ module.exports = {
   login: ctrlWrapper(login),
   newPassword: ctrlWrapper(newPassword),
   logout: ctrlWrapper(logout),
-  refreshToken: ctrlWrapper(refreshToken),
+  googleAuth: ctrlWrapper(googleAuth),
+  // refreshToken: ctrlWrapper(refreshToken),
   refreshUser: ctrlWrapper(refreshUser),
   userUpdate: ctrlWrapper(userUpdate),
 };

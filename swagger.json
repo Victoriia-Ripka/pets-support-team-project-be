@@ -166,6 +166,27 @@
         }
       }
     },
+    "/users/google": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "registration / login with google",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "201": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "204": {
+            "description": "No Content",
+            "content": {}
+          }
+        }
+      }
+    },
     "/users/login": {
       "post": {
         "tags": ["auth"],
