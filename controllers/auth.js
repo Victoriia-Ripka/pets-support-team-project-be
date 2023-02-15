@@ -144,6 +144,8 @@ const login = async (req, res) => {
       phone: user.phone,
       avatarURL: user.avatarURL,
       dateofbirth: user.dateofbirth,
+      favorites: user.favorites,
+      _id: user._id,
     },
   });
 };
@@ -252,8 +254,8 @@ const logout = async (req, res) => {
 // };
 
 const refreshUser = async (req, res) => {
-  const { email, name, place, phone, avatarURL, dateofbirth } = req.user;
-  res.status(200).json({ email, name, place, phone, avatarURL, dateofbirth });
+  const { email, name, place, phone, avatarURL, dateofbirth, favorites, _id } = req.user;
+  res.status(200).json({ email, name, place, phone, avatarURL, dateofbirth, favorites,_id });
 };
 
 const userUpdate = async (req, res) => {

@@ -10,6 +10,7 @@ const selectCategory = {
   dateofbirth: 1,
   price: 1,
   avatarURL: 1,
+  owner: 1,
 };
 
 const getPetsByCategories = async (req, res) => {
@@ -54,7 +55,8 @@ const addToFavorite = async (req, res) => {
     throw httpError(401);
   }
 
-  const doesNoticeExists = await Notices.exists({_id: noticeId});
+  const doesNoticeExists = await Notices.findById({ _id: noticeId });
+  
 
   if (!doesNoticeExists) {
     throw httpError(404, "notice doesn't exist")
@@ -66,7 +68,7 @@ const addToFavorite = async (req, res) => {
       { $addToSet: { favorites: noticeId } },
       { fields: { favorites: 1 } }
     );
-    res.status(200).json({ message: "success" });
+    res.status(200).json(doesNoticeExists);
   } catch (error) {
     throw httpError(404, "bad request");
   }
@@ -86,7 +88,7 @@ const removeFromFavorite = async (req, res) => {
       { $pull: { favorites: noticeId } },
       { fields: { favorites: 1 } }
     );
-    res.status(200).json({ message: "success" });
+    res.status(200).json({ id: noticeId });
   } catch (error) {
     res.status(404).json({ message: "bad request" });
   }
@@ -109,14 +111,17 @@ const getFavoritePets = async (req, res) => {
 const addPet = async (req, res) => {
   const { title, name, dateofbirth, breed, place, price, sex, comments, category } =
     req.body;
+  if (category === 'sell' & !price) {
+    res.status(400).json({ message: 'Price is required' });
+  }
+  let parseIntPrice = undefined;
+  price ? parseIntPrice = parseInt(price, 10) : null;
   const { id } = req.user;
   const width = 280;
   const height = 280;
-  let avatarURL = '';
+  let avatarURL = undefined;
   if (req?.file?.path) {
     avatarURL = await createAvatar(req.file.path, width, height);
-  } else {
-    res.status(400).json({ message: 'Avatar is required' });
   }
   const pet = new Notices({
     owner: id,
@@ -125,7 +130,7 @@ const addPet = async (req, res) => {
     dateofbirth,
     breed,
     place,
-    price,
+    price: parseIntPrice,
     sex,
     comments,
     category,

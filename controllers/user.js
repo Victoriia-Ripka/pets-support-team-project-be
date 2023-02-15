@@ -5,7 +5,7 @@ const getUserInfo = async (req, res) => {
   const { _id } = req.user;
 
   const data = await User.findOne({ _id });
-  const pets = await Pets.find({ owner: _id });
+  const pets = await Pets.find({ owner: _id }).sort({ createdAt: -1 });
 
   res.status(200).json({
     status: "success",
@@ -22,21 +22,26 @@ const addPet = async (req, res) => {
 
   const width = 240;
   const height = 240;
-  let avatarURL = '';
+  let avatarURL = undefined;
   if (req?.file?.path) {
     avatarURL = await createAvatar(req.file.path, width, height);
-  } else {
-    res.status(400).json({ message: 'Avatar is required' });
   }
+  // else {
+  //   res.status(400).json({ message: 'Avatar is required' });
+  // }
   
 
-  await Pets.create({ ...req.body, owner, avatarURL });
+  const newPet = await Pets.create({ ...req.body, owner, avatarURL });
 
   res.status(201).json({
     status: "success",
     code: 201,
     data: {
-      ...req.body,
+      name: newPet.name,
+      date: newPet.date,
+      breed: newPet.breed,
+      comment: newPet.comment,
+      _id: newPet._id,
       avatarURL,
       owner,
     },
