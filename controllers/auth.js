@@ -24,11 +24,10 @@ const createNewPassword = (email, password) => {
     to: email,
     subject: "Petly App. Password recovery",
     text: `Here is your new password: ${password}`,
-    html: `<p>Here is your new password: ${password}</p><a targt="_blank" href="https://alexandra-makarenko.github.io/pets-support-team-project/login">Link to login.</a><p>Have a nice day</p>`,
+    html: `<a targt="_blank" href="https://alexandra-makarenko.github.io/pets-support-team-project/login">Link to login.</a><p>Here is your new password: ${password}</p><p>Have a nice day</p>`,
   };
 };
 
-// ${process.env.BASE_URL}/api/users/verify/${verificationToken}
 const registration = async (req, res) => {
   const { email, password, name, place, phone } = req.body;
   const avatarURL = gravatar.url(email);
