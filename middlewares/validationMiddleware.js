@@ -9,11 +9,11 @@ const regionRulesOnlyLetters = /^[a-zA-Z\s]{3,},[a-zA-Z\s]{4,}$/;
 
 const userValidation = async (req, res, next) => {
     const schema = Joi.object({
-        name: Joi.string().min(3).max(30).required().pattern(nameRules),
+        name: Joi.string().min(3).max(30).pattern(nameRules),
         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua'] } }).max(40).required(),
-        place: Joi.string().min(2).max(30).required().pattern(regionRules).pattern(regionRulesOnlyLetters),
+        place: Joi.string().min(2).max(30).pattern(regionRules).pattern(regionRulesOnlyLetters),
         password: Joi.string().min(7).max(32).required().pattern(passwordSchema),
-        phone: Joi.string().pattern(phoneSchema).required(),
+        phone: Joi.string().pattern(phoneSchema),
     });
 
     const validationResult = schema.validate(req.body);
@@ -25,9 +25,9 @@ const userValidation = async (req, res, next) => {
 
 const userUpdateValidation = async (req, res, next) => {
     const schema = Joi.object({
-        name: Joi.string().min(3).max(30).pattern(nameRules),
+        name: Joi.string().min(3).max(30).pattern(nameRules).allow(''),
         place: Joi.string().min(2).max(30).pattern(regionRules).pattern(regionRulesOnlyLetters),
-        phone: Joi.string().pattern(phoneSchema),
+        phone: Joi.string().pattern(phoneSchema).allow(''),
         dateofbirth: Joi.string().pattern(dateOfBirthSchema).allow(""),
         avatarURL: Joi.string(),
     });

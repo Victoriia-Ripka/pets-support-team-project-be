@@ -24,8 +24,11 @@ const userSchema = new mongoose.Schema(
     token: { type: String, default: null },
     refreshToken: [String],
     avatarURL: { type: String, required: true },
-    name: { type: String, required: true, formData: nameRules },
-    place: { type: String, required: true, formData: regionRules, formData: regionRulesOnlyLetters },
+    name: { type: String, formData: nameRules },
+    place: { type: String, formData: regionRules, formData: regionRulesOnlyLetters },
+    phone: { type: String, formData: phoneSchema },
+    dateofbirth: { type: String, required: true, default: "01.01.1900", formData: dateOfBirthSchema},
+    favorites: {type: [mongoose.Schema.Types.ObjectId], ref: 'notices', default: []},
     verify: {
       type: Boolean,
       default: false,
@@ -33,19 +36,7 @@ const userSchema = new mongoose.Schema(
     verificationToken: {
       type: String,
       required: [true, "Verify token is required"],
-    },
-    phone: { type: String, required: true, formData: phoneSchema },
-    dateofbirth: {
-      type: String,
-      required: true,
-      default: "01.01.1900",
-      formData: dateOfBirthSchema,
-    },
-    favorites: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "notices",
-      default: [],
-    },
+    }
   },
   { timestamps: true }
 );
