@@ -19,6 +19,16 @@ const createVarifyEmail = (email, verificationToken) => {
   };
 };
 
+const createNewPassword = (email, password) => {
+  return {
+    to: email,
+    subject: "Petly App. Password recovery",
+    text: `Here is your new password: ${password}`,
+    html: `<p>Here is your new password: ${password}</p><a targt="_blank" href="https://alexandra-makarenko.github.io/pets-support-team-project/login">Link to login.</a><p>Have a nice day</p>`,
+  };
+};
+
+// ${process.env.BASE_URL}/api/users/verify/${verificationToken}
 const registration = async (req, res) => {
   const { email, password, name, place, phone } = req.body;
   const avatarURL = gravatar.url(email);
@@ -52,7 +62,7 @@ const googleAuth = async (req, res) => {
     // { expiresIn: "23h" }
   );
   await User.findByIdAndUpdate(_id, { token });
-  res.redirect(`${process.env.BASE_URL}?token=${token}`)
+  res.redirect(`${process.env.BASE_URL}?token=${token}`);
 };
 
 const verify = async (req, res) => {
@@ -277,24 +287,16 @@ const userUpdate = async (req, res) => {
 
 const newPassword = async (req, res) => {
   const { email } = req.body;
+  const user = await User.findOne({ email });
 
-  const user = await User.findOne({ email, verify: true });
-
-  if (!user) {
-    httpError(404);
-  }
+  if (!user) { httpError(404) }
 
   const password = uuid.v4();
-  const hashPassword = await bcrypt.hash(newPassword, 10);
+  const hashPassword = await bcrypt.hash(password, 10);
   await user.findByIdAndUpdate(user._id, { password: hashPassword });
 
-  const emailPassword = {
-    to: email,
-    subject: "Petly App. Password recovery",
-    text: `Here is your temperary password: ${password}`,
-    html: `<p>Here is your temperary password: ${password}</p>`,
-  };
-  await sendEmail(emailPassword);
+  const emailToUser = createNewPassword(email, hashPassword);
+  await sendEmail(emailToUser);
 
   res.status(200).json({
     message: "Password updated successfuly",
