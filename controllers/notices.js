@@ -17,7 +17,7 @@ const getPetsByCategories = async (req, res) => {
   const { category } = req.params;
   let { page } = req.query;
   let skip = 0;
-  let limit = 8;
+  let limit = 16;
   if (page && page >= 1) {
     skip = (page - 1) * limit;
   }
@@ -102,7 +102,7 @@ const getFavoritePets = async (req, res) => {
   const { id } = req.user;
   let { page } = req.query;
   let skip = 0;
-  let limit = 8;
+  let limit = 16;
   if (page && page >= 1) {
     skip = (page - 1) * limit;
   }
@@ -152,7 +152,7 @@ const getUserPets = async (req, res) => {
   const { id } = req.user;
   let { page } = req.query;
   let skip = 0;
-  let limit = 8;
+  let limit = 16;
   if (page && page >= 1) {
     skip = (page - 1) * limit;
   }
