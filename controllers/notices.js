@@ -15,8 +15,12 @@ const selectCategory = {
 
 const getPetsByCategories = async (req, res) => {
   const { category } = req.params;
+  let { page } = req.query;
   let skip = 0;
   let limit = 8;
+  if (page && page >= 1) {
+    skip = (page - 1) * limit;
+  }
   if (
     category !== "sell" &&
     category !== "lost-found" &&
@@ -96,8 +100,12 @@ const removeFromFavorite = async (req, res) => {
 
 const getFavoritePets = async (req, res) => {
   const { id } = req.user;
+  let { page } = req.query;
   let skip = 0;
   let limit = 8;
+  if (page && page >= 1) {
+    skip = (page - 1) * limit;
+  }
   const [pets] = await User.find({ _id: id }, { favorites: 1 }).populate({
     path: "favorites",
     skip: skip,
@@ -142,8 +150,12 @@ const addPet = async (req, res) => {
 
 const getUserPets = async (req, res) => {
   const { id } = req.user;
+  let { page } = req.query;
   let skip = 0;
   let limit = 8;
+  if (page && page >= 1) {
+    skip = (page - 1) * limit;
+  }
   const pets = await Notices.find({ owner: id })
     .select(selectCategory)
     .limit(limit)
