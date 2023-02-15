@@ -76,6 +76,117 @@
         }
       }
     },
+    "/users/new_password": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "User forgot password",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserNewPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserNewPasswordResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/verify/:verificationToken": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "User's verifing email",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserVerifyResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/verify": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "User's verifing email",
+        "parameters": [],
+        "requestBody": {
+          "description": "Verify's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyNewlyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyNewlyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/users/google": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "registration / login with google",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "201": {
+            "description": "Successful operation",
+            "content": {}
+          },
+          "204": {
+            "description": "No Content",
+            "content": {}
+          }
+        }
+      }
+    },
     "/users/login": {
       "post": {
         "tags": ["auth"],
@@ -589,6 +700,50 @@
           "email": "user@gmail.com"
         }
       },
+      "UserVerifyResponse": {
+        "type": "string",
+        "example": {
+          "message": "Verification successful"
+        }
+      },
+      "VerifyNewlyRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "VerifyNewlyResponse": {
+        "type": "object",
+        "properties": {
+          "type": "string",
+          "example": {
+            "message": "Verification email sent"
+          }
+        }
+      },
+      "UserNewPasswordRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "UserNewPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "type": "string",
+          "example": {
+            "message": "Password updated successfuly"
+          }
+        }
+      },
       "UserLoginRequest": {
         "type": "object",
         "required": ["email", "password"],
@@ -630,7 +785,7 @@
               "avatarURL": {
                 "type": "string"
               },
-              "dayofbirth": {
+              "dateofbirth": {
                 "type": "date",
                 "format": "dd.mm.yyyy"
               }
@@ -644,7 +799,8 @@
             "name": "dsffdsg",
             "place": "dsfg",
             "phone": "+380995557766",
-            "avatarURL": "//www.gravatar.com/avatar/14bc5d9db690fe958f6f59bc59149038"
+            "avatarURL": "//www.gravatar.com/avatar/14bc5d9db690fe958f6f59bc59149038",
+            "dateofbirth": "01.01.1900"
           }
         }
       },
@@ -678,6 +834,10 @@
           },
           "avatarURL": {
             "type": "string"
+          },
+          "dateofbirth": {
+            "type": "date",
+            "format": "dd.mm.yyyy"
           }
         },
         "example": {
