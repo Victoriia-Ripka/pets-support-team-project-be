@@ -16,10 +16,13 @@ const selectCategory = {
 const getPetsByCategories = async (req, res) => {
   const { category } = req.params;
   let { page } = req.query;
+  page = parseInt(page);
   let skip = 0;
   let limit = 16;
   if (page && page >= 1) {
     skip = (page - 1) * limit;
+  } else {
+    page = 1
   }
   if (
     category !== "sell" &&
@@ -28,12 +31,29 @@ const getPetsByCategories = async (req, res) => {
   ) {
     throw httpError(400, "bad request");
   }
-  const pets = await Notices.find({ category })
+  Notices.find({ category })
     .select(selectCategory)
     .limit(limit)
     .skip(skip)
-    .sort({ createdAt: -1 });
-  res.status(200).json(pets);
+    .sort({ createdAt: -1 })
+    .exec((err, doc) => {
+      if (err) {
+        return res.json(err);
+      }
+      Notices.countDocuments({ category }).exec((count_error, count) => {
+        if (err) {
+          return res.json(count_error);
+        }
+        const totalPages = Math.ceil(count / limit);
+        return res.json({
+          total_results: count,
+          total_pages: totalPages,
+          page: page,
+          notices: doc
+        });
+      });
+    });
+  // res.status(200).json(pets);
 };
 
 const getPetById = async (req, res) => {
@@ -101,18 +121,22 @@ const removeFromFavorite = async (req, res) => {
 const getFavoritePets = async (req, res) => {
   const { id } = req.user;
   let { page } = req.query;
+  page = parseInt(page);
   let skip = 0;
   let limit = 16;
   if (page && page >= 1) {
     skip = (page - 1) * limit;
+  } else {
+    page = 1
   }
+  
   const [pets] = await User.find({ _id: id }, { favorites: 1 }).populate({
     path: "favorites",
     skip: skip,
     limit: limit,
     options: { sort: { created_at: -1 } },
     select: selectCategory,
-  });
+  })
   res.status(200).json(pets["favorites"]);
 };
 
@@ -151,17 +175,36 @@ const addPet = async (req, res) => {
 const getUserPets = async (req, res) => {
   const { id } = req.user;
   let { page } = req.query;
+  page = parseInt(page);
   let skip = 0;
   let limit = 16;
   if (page && page >= 1) {
     skip = (page - 1) * limit;
+  } else {
+    page = 1
   }
-  const pets = await Notices.find({ owner: id })
+  Notices.find({ owner: id })
     .select(selectCategory)
     .limit(limit)
     .skip(skip)
-    .sort({ createdAt: -1 });
-  res.status(200).json(pets);
+    .sort({ createdAt: -1 })
+    .exec((err, doc) => {
+      if (err) {
+        return res.json(err);
+      }
+      Notices.countDocuments({ owner: id }).exec((count_error, count) => {
+        if (err) {
+          return res.json(count_error);
+        }
+        const totalPages = Math.ceil(count / limit);
+        return res.json({
+          total_results: count,
+          total_pages: totalPages,
+          page: page,
+          notices: doc
+        });
+      });
+    });
 };
 
 const deletePet = async (req, res) => {
