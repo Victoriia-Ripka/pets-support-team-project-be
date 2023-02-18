@@ -55,7 +55,7 @@ const getPetsByCategories = async (req, res) => {
       if (err) {
         return res.json(err);
       }
-      Notices.countDocuments({ category }).exec((count_error, count) => {
+      Notices.countDocuments({ category, ...query }).exec((count_error, count) => {
         if (err) {
           return res.json(count_error);
         }
