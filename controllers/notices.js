@@ -14,16 +14,28 @@ const selectCategory = {
 };
 
 const getPetsByCategories = async (req, res) => {
+  const { keyword } = req.query;
   const { category } = req.params;
   let { page } = req.query;
+
   page = parseInt(page);
   let skip = 0;
   let limit = 16;
   if (page && page >= 1) {
     skip = (page - 1) * limit;
   } else {
-    page = 1
+    page = 1;
   }
+
+  let query = {};
+  if (keyword) {
+    query.$or = [
+      { title: { $regex: keyword, $options: "i" } },
+      { breed: { $regex: keyword, $options: "i" } },
+      { comments: { $regex: keyword, $options: "i" } },
+    ];
+  }
+
   if (
     category !== "sell" &&
     category !== "lost-found" &&
@@ -31,7 +43,10 @@ const getPetsByCategories = async (req, res) => {
   ) {
     throw httpError(400, "bad request");
   }
-  Notices.find({ category })
+
+  query.$and = [{ "category": category }];
+  
+  Notices.find({ category, ...query })
     .select(selectCategory)
     .limit(limit)
     .skip(skip)
@@ -45,15 +60,14 @@ const getPetsByCategories = async (req, res) => {
           return res.json(count_error);
         }
         const totalPages = Math.ceil(count / limit);
-        return res.json({
+        return res.status(200).json({
           total_results: count,
           total_pages: totalPages,
           page: page,
-          notices: doc
+          notices: doc,
         });
       });
     });
-  // res.status(200).json(pets);
 };
 
 const getPetById = async (req, res) => {
@@ -80,10 +94,9 @@ const addToFavorite = async (req, res) => {
   }
 
   const doesNoticeExists = await Notices.findById({ _id: noticeId });
-  
 
   if (!doesNoticeExists) {
-    throw httpError(404, "notice doesn't exist")
+    throw httpError(404, "notice doesn't exist");
   }
 
   try {
@@ -105,7 +118,7 @@ const removeFromFavorite = async (req, res) => {
   if (!id) {
     throw httpError(401);
   }
-  
+
   try {
     await User.findByIdAndUpdate(
       { _id: id },
@@ -127,27 +140,36 @@ const getFavoritePets = async (req, res) => {
   if (page && page >= 1) {
     skip = (page - 1) * limit;
   } else {
-    page = 1
+    page = 1;
   }
-  
+
   const [pets] = await User.find({ _id: id }, { favorites: 1 }).populate({
     path: "favorites",
     skip: skip,
     limit: limit,
     options: { sort: { created_at: -1 } },
     select: selectCategory,
-  })
+  });
   res.status(200).json(pets["favorites"]);
 };
 
 const addPet = async (req, res) => {
-  const { title, name, dateofbirth, breed, place, price, sex, comments, category } =
-    req.body;
-  if (category === 'sell' & !price) {
-    res.status(400).json({ message: 'Price is required' });
+  const {
+    title,
+    name,
+    dateofbirth,
+    breed,
+    place,
+    price,
+    sex,
+    comments,
+    category,
+  } = req.body;
+  if ((category === "sell") & !price) {
+    res.status(400).json({ message: "Price is required" });
   }
   let parseIntPrice = undefined;
-  price ? parseIntPrice = parseInt(price, 10) : null;
+  price ? (parseIntPrice = parseInt(price, 10)) : null;
   const { id } = req.user;
   const width = 280;
   const height = 280;
@@ -181,7 +203,7 @@ const getUserPets = async (req, res) => {
   if (page && page >= 1) {
     skip = (page - 1) * limit;
   } else {
-    page = 1
+    page = 1;
   }
   Notices.find({ owner: id })
     .select(selectCategory)
@@ -201,7 +223,7 @@ const getUserPets = async (req, res) => {
           total_results: count,
           total_pages: totalPages,
           page: page,
-          notices: doc
+          notices: doc,
         });
       });
     });

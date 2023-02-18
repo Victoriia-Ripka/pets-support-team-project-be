@@ -312,7 +312,16 @@
       "get": {
         "tags": ["news"],
         "summary": "petly news",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "keyword",
+            "schema": {
+              "example": "?keyword=cat"
+            },
+            "description": "search by word (keyword)"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -454,7 +463,16 @@
       "get": {
         "tags": ["notices"],
         "summary": "get pets by category (sell / lost-found / in-good-hands)",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "keyword",
+            "schema": {
+              "example": "?keyword=cat"
+            },
+            "description": "search by word (keyword)"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -665,7 +683,7 @@
     "schemas": {
       "UserSignupRequest": {
         "type": "object",
-        "required": ["email", "password", "name", "place", "phone"],
+        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -717,12 +735,9 @@
         }
       },
       "VerifyNewlyResponse": {
-        "type": "object",
-        "properties": {
-          "type": "string",
-          "example": {
-            "message": "Verification email sent"
-          }
+        "type": "string",
+        "example": {
+          "message": "Verification email sent"
         }
       },
       "UserNewPasswordRequest": {
@@ -736,12 +751,9 @@
         }
       },
       "UserNewPasswordResponse": {
-        "type": "object",
-        "properties": {
-          "type": "string",
-          "example": {
-            "message": "Password updated successfuly"
-          }
+        "type": "string",
+        "example": {
+          "message": "Password updated successfuly"
         }
       },
       "UserLoginRequest": {
@@ -772,35 +784,33 @@
                 "type": "string",
                 "format": "email"
               },
-              "name": {
-                "type": "string"
-              },
-              "place": {
-                "type": "string"
-              },
-              "phone": {
-                "type": "string",
-                "format": "phone"
-              },
               "avatarURL": {
                 "type": "string"
               },
               "dateofbirth": {
                 "type": "date",
                 "format": "dd.mm.yyyy"
+              },
+              "favorites": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "_id": {
+                "type": "string"
               }
             }
           }
         },
         "example": {
-          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2U2MTlmMmU3NGJjOWI4MTI2MWQyMGEiLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTEwVDEwOjE4OjI2LjQ0MloiLCJpYXQiOjE2NzYwMjU3ODR9.Uxa-7jheuPQeHHeiemwAC-SBKH5PE7bbRalGGD1S7jE",
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2M2YwZGRkNzEyOTY5ZDkxYzIzMjA0ZDciLCJpYXQiOjE2NzY3MzM4NzB9.cdWuv49n5p1zHhtIt8F6CtO-T6zOqaz-5KWIR--9WD4",
           "user": {
-            "email": "ghfxg@gmail.com",
-            "name": "dsffdsg",
-            "place": "dsfg",
-            "phone": "+380995557766",
-            "avatarURL": "//www.gravatar.com/avatar/14bc5d9db690fe958f6f59bc59149038",
-            "dateofbirth": "01.01.1900"
+            "email": "vikaripka@gmail.com",
+            "avatarURL": "//www.gravatar.com/avatar/5a2e862031b7cf673ddfa5bc5dc7e767",
+            "dateofbirth": "01.01.1900",
+            "favorites": [],
+            "_id": "63f0ddd712969d91c23204d7"
           }
         }
       },
@@ -822,30 +832,29 @@
             "type": "string",
             "format": "email"
           },
-          "name": {
-            "type": "string"
-          },
-          "place": {
-            "type": "string"
-          },
-          "phone": {
-            "type": "string",
-            "format": "phone"
-          },
           "avatarURL": {
             "type": "string"
           },
           "dateofbirth": {
             "type": "date",
             "format": "dd.mm.yyyy"
+          },
+          "favorites": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "_id": {
+            "type": "string"
           }
         },
         "example": {
-          "email": "user@gmail.com",
-          "name": "user",
-          "place": "ukraine",
-          "phone": "+387775556644",
-          "avatarURL": "//www.gravatar.com/avatar/320eab812ab24ef3dbaa2e6dc6e024e0"
+          "email": "vikaripka@gmail.com",
+          "avatarURL": "//www.gravatar.com/avatar/5a2e862031b7cf673ddfa5bc5dc7e767",
+          "dateofbirth": "01.01.1900",
+          "favorites": [],
+          "_id": "63f0ddd712969d91c23204d7"
         }
       },
       "UserUpdateRequest": {
@@ -855,7 +864,8 @@
             "type": "string"
           },
           "place": {
-            "type": "string"
+            "type": "string",
+            "description": "place must conatine two words (ciy and region) and coma"
           },
           "phone": {
             "type": "string",
@@ -877,12 +887,26 @@
       "UserUpdateResponse": {
         "type": "object",
         "properties": {
-          "status": {
+          "place": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "format": "phone"
+          },
+          "dateofbirth": {
+            "type": "string",
+            "format": "dd.mm.yyyy"
+          },
+          "avatarURL": {
             "type": "string"
           }
         },
         "example": {
-          "status": "success"
+          "place": "Kyiv, Ukraine",
+          "phone": "+380667547756",
+          "dateofbirth": "01.01.1900",
+          "avatarURL": "//www.gravatar.com/avatar/5a2e862031b7cf673ddfa5bc5dc7e767"
         }
       },
       "UserInfoResponse": {
@@ -1287,40 +1311,62 @@
         }
       },
       "PetsByCategoriesResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "string"
-            },
-            "title": {
-              "type": "string"
-            },
-            "breed": {
-              "type": "string"
-            },
-            "place": {
-              "type": "string"
-            },
-            "price": {
-              "type": "string"
-            },
-            "category": {
-              "type": "string"
+        "type": "object",
+        "properties": {
+          "total_results": {
+            "type": "integer"
+          },
+          "total_pages": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "notices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "breed": {
+                  "type": "string"
+                },
+                "place": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                }
+              }
             }
           }
         },
-        "example": [
-          {
-            "_id": "63e49f5c953a94175d3e078d",
-            "title": "cute doggy looking for home",
-            "breed": "monkey",
-            "place": "street",
-            "price": "1$",
-            "category": "sell"
-          }
-        ]
+        "example": {
+          "total_results": 1,
+          "total_pages": 1,
+          "page": 1,
+          "notices": [
+            {
+              "_id": "63eba2fd2579e96edf54a46d",
+              "title": "Cute pet",
+              "dateofbirth": "11.05.2022",
+              "breed": "labrador",
+              "place": "Kyiv, Ukraine",
+              "price": 1000,
+              "category": "sell",
+              "avatarURL": "https://res.cloudinary.com/dznsyhppg/image/upload/v1676387068/4fe5425c-e410-4749-9e08-1f294bd80fe9.webp",
+              "owner": "63ea622be4091872cb351aef"
+            }
+          ]
+        }
       },
       "UserFavPetsResponse": {
         "type": "array",
