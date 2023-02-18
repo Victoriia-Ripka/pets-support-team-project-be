@@ -312,7 +312,16 @@
       "get": {
         "tags": ["news"],
         "summary": "petly news",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "keyword",
+            "schema": {
+              "example": "?keyword=cat"
+            },
+            "description": "search by word (keyword)"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -454,7 +463,16 @@
       "get": {
         "tags": ["notices"],
         "summary": "get pets by category (sell / lost-found / in-good-hands)",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "keyword",
+            "schema": {
+              "example": "?keyword=cat"
+            },
+            "description": "search by word (keyword)"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -665,7 +683,7 @@
     "schemas": {
       "UserSignupRequest": {
         "type": "object",
-        "required": ["email", "password", "name", "place", "phone"],
+        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -717,12 +735,9 @@
         }
       },
       "VerifyNewlyResponse": {
-        "type": "object",
-        "properties": {
-          "type": "string",
-          "example": {
-            "message": "Verification email sent"
-          }
+        "type": "string",
+        "example": {
+          "message": "Verification email sent"
         }
       },
       "UserNewPasswordRequest": {
@@ -736,12 +751,9 @@
         }
       },
       "UserNewPasswordResponse": {
-        "type": "object",
-        "properties": {
-          "type": "string",
-          "example": {
-            "message": "Password updated successfuly"
-          }
+        "type": "string",
+        "example": {
+          "message": "Password updated successfuly"
         }
       },
       "UserLoginRequest": {
@@ -1287,40 +1299,62 @@
         }
       },
       "PetsByCategoriesResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "string"
-            },
-            "title": {
-              "type": "string"
-            },
-            "breed": {
-              "type": "string"
-            },
-            "place": {
-              "type": "string"
-            },
-            "price": {
-              "type": "string"
-            },
-            "category": {
-              "type": "string"
+        "type": "object",
+        "properties": {
+          "total_results": {
+            "type": "integer"
+          },
+          "total_pages": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "notices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "breed": {
+                  "type": "string"
+                },
+                "place": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                }
+              }
             }
           }
         },
-        "example": [
-          {
-            "_id": "63e49f5c953a94175d3e078d",
-            "title": "cute doggy looking for home",
-            "breed": "monkey",
-            "place": "street",
-            "price": "1$",
-            "category": "sell"
-          }
-        ]
+        "example": {
+          "total_results": 1,
+          "total_pages": 1,
+          "page": 1,
+          "notices": [
+            {
+              "_id": "63eba2fd2579e96edf54a46d",
+              "title": "Cute pet",
+              "dateofbirth": "11.05.2022",
+              "breed": "labrador",
+              "place": "Kyiv, Ukraine",
+              "price": 1000,
+              "category": "sell",
+              "avatarURL": "https://res.cloudinary.com/dznsyhppg/image/upload/v1676387068/4fe5425c-e410-4749-9e08-1f294bd80fe9.webp",
+              "owner": "63ea622be4091872cb351aef"
+            }
+          ]
+        }
       },
       "UserFavPetsResponse": {
         "type": "array",
