@@ -1,7 +1,9 @@
-const Joi = require('joi');
+const Joi = require('joi').extend(require('@joi/date'));
 const phoneSchema = /^\+380[0-9]{9}$/;
-const passwordSchema = /^[0-9a-zA-Z]{7,32}$/;
-const dateOfBirthSchema = /^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/;
+// const passwordSchema = /^[0-9a-zA-Z]{7,32}$/;
+const passwordSchemaStepOne = /^(\S+$)/;
+const passwordSchemaStepTwo = /^(?=.*[a-z])(?=.*[A-Z])/;
+const passwordSchemaStepThree = /^(?=.{6,20}$)\D*\d/;
 const nameRules = /^[aA-zZ\s]+$/;
 const regionRules = /^()(\w+(,|\s)\s*)+\w+$/;
 const regionRulesOnlyLetters = /^[a-zA-Z\s]{3,},[a-zA-Z\s]{4,}$/;
@@ -12,7 +14,7 @@ const userValidation = async (req, res, next) => {
         name: Joi.string().min(3).max(30).pattern(nameRules),
         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua'] } }).max(40).required(),
         place: Joi.string().min(2).max(30).pattern(regionRules).pattern(regionRulesOnlyLetters),
-        password: Joi.string().min(7).max(32).required().pattern(passwordSchema),
+        password: Joi.string().min(7).max(32).required().pattern(passwordSchemaStepOne).pattern(passwordSchemaStepTwo).pattern(passwordSchemaStepThree),
         phone: Joi.string().pattern(phoneSchema),
     });
 
@@ -28,7 +30,7 @@ const userUpdateValidation = async (req, res, next) => {
         name: Joi.string().min(3).max(30).pattern(nameRules).allow(''),
         place: Joi.string().min(2).max(30).pattern(regionRules).pattern(regionRulesOnlyLetters),
         phone: Joi.string().pattern(phoneSchema).allow(''),
-        dateofbirth: Joi.string().pattern(dateOfBirthSchema).allow(""),
+        dateofbirth: Joi.date().format('DD.MM.YYYY').max('now'),
         avatarURL: Joi.string(),
     });
 
@@ -44,7 +46,7 @@ const noticeValidation = async (req, res, next) => {
         title: Joi.string().min(2).max(80).required(),
         name: Joi.string().min(2).max(30),
         place: Joi.string().min(2).max(30).required(),
-        dateofbirth: Joi.string().pattern(dateOfBirthSchema).allow(""),
+        dateofbirth: Joi.date().format('DD.MM.YYYY').max('now'),
         breed: Joi.string().min(2).max(30),
         price: Joi.number().positive(),
         sex: Joi.boolean().required(),
