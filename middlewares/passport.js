@@ -19,7 +19,6 @@ const googleCallback = async ( req, accessToken, refreshToken, profile, ) => {
     const { email, displayName } = profile;
     console.log(profile)
     console.log(profile._json)
-    // phone, place
     const user = await User.findOne({ email });
     if (user) {
       return document(null, user);

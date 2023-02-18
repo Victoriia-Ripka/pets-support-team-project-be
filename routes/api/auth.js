@@ -14,7 +14,7 @@ router.get("/verify/:verificationToken", ctrl.verify);
 router.post("/verify", ctrl.verifyNewly);
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["email", "name", "city", "phone"] })
+  passport.authenticate("google", { scope: ["email", "name"] })
 );
 router.get(
   "/google/callback",
