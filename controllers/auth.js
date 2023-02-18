@@ -294,7 +294,8 @@ const newPassword = async (req, res) => {
 
   const password = uuid.v4();
   const hashPassword = await bcrypt.hash(password, 10);
-  await User.findByIdAndUpdate( user._id , { password: hashPassword });
+
+  await User.findByIdAndUpdate( user._id, { password: hashPassword });
 
   const emailToUser = createNewPassword(email, password);
   await sendEmail(emailToUser);
