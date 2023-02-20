@@ -3,7 +3,7 @@ const phoneSchema = /^\+380[0-9]{9}$/;
 // const passwordSchema = /^[0-9a-zA-Z]{7,32}$/;
 const passwordSchemaStepOne = /^(\S+$)/;
 const passwordSchemaStepTwo = /^(?=.*[a-z])(?=.*[A-Z])/;
-const passwordSchemaStepThree = /^(?=.{6,20}$)\D*\d/;
+const passwordSchemaStepThree = /^(?=.{6,40}$)\D*\d/;
 const nameRules = /^[aA-zZ\s]+$/;
 const regionRules = /^()(\w+(,|\s)\s*)+\w+$/;
 const regionRulesOnlyLetters = /^[a-zA-Z\s]{3,},[a-zA-Z\s]{4,}$/;
