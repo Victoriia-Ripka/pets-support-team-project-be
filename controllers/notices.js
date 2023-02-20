@@ -1,5 +1,5 @@
 const { httpError, createAvatar } = require("../helpers");
-const { User, Notices } = require("../models");
+const { User, Notices, Pets } = require("../models");
 const { ctrlWrapper } = require("../helpers");
 
 const selectCategory = {
@@ -44,8 +44,8 @@ const getPetsByCategories = async (req, res) => {
     throw httpError(400, "bad request");
   }
 
-  query.$and = [{ "category": category }];
-  
+  query.$and = [{ category: category }];
+
   Notices.find({ category, ...query })
     .select(selectCategory)
     .limit(limit)
@@ -55,18 +55,20 @@ const getPetsByCategories = async (req, res) => {
       if (err) {
         return res.json(err);
       }
-      Notices.countDocuments({ category, ...query }).exec((count_error, count) => {
-        if (err) {
-          return res.json(count_error);
+      Notices.countDocuments({ category, ...query }).exec(
+        (count_error, count) => {
+          if (err) {
+            return res.json(count_error);
+          }
+          const totalPages = Math.ceil(count / limit);
+          return res.status(200).json({
+            total_results: count,
+            total_pages: totalPages,
+            page: page,
+            notices: doc,
+          });
         }
-        const totalPages = Math.ceil(count / limit);
-        return res.status(200).json({
-          total_results: count,
-          total_pages: totalPages,
-          page: page,
-          notices: doc,
-        });
-      });
+      );
     });
 };
 
@@ -132,8 +134,10 @@ const removeFromFavorite = async (req, res) => {
 };
 
 const getFavoritePets = async (req, res) => {
+  const { keyword } = req.query;
   const { id } = req.user;
   let { page } = req.query;
+
   page = parseInt(page);
   let skip = 0;
   let limit = 16;
@@ -143,14 +147,51 @@ const getFavoritePets = async (req, res) => {
     page = 1;
   }
 
-  const [pets] = await User.find({ _id: id }, { favorites: 1 }).populate({
-    path: "favorites",
-    skip: skip,
-    limit: limit,
-    options: { sort: { created_at: -1 } },
-    select: selectCategory,
-  });
-  res.status(200).json(pets["favorites"]);
+  let query = {};
+  if (keyword) {
+    query.$or = [
+      { title: { $regex: keyword, $options: "i" } },
+      { breed: { $regex: keyword, $options: "i" } },
+      { comments: { $regex: keyword, $options: "i" } },
+    ];
+  }
+
+  const [pets] = await User.find({ _id: id }, { favorites: 1 })
+  console.log(pets)
+
+  // const [pets] = await User.find({ _id: id }, { favorites: 1 }).populate({
+  //   path: "favorites",
+  //   skip: skip,
+  //   limit: limit,
+  //   options: { sort: { created_at: -1 } },
+  //   select: selectCategory,
+  // });
+  // res.status(200).json(pets["favorites"]);
+
+  // console.log(query["$or"]);
+  // console.log(query["$and"]);
+
+  Notices.find({ ...query })
+    .limit(limit)
+    .skip(skip)
+    .sort({ createdAt: -1 })
+    .exec((err, doc) => {
+      if (err) {
+        return res.json(err);
+      }
+      Notices.countDocuments({ ...query }).exec((count_error, count) => {
+        if (err) {
+          return res.json(count_error);
+        }
+        const totalPages = Math.ceil(count / limit);
+        return res.status(200).json({
+          total_results: count,
+          total_pages: totalPages,
+          page: page,
+          notices: doc,
+        });
+      });
+    });
 };
 
 const addPet = async (req, res) => {
@@ -196,7 +237,9 @@ const addPet = async (req, res) => {
 
 const getUserPets = async (req, res) => {
   const { id } = req.user;
+  const { keyword } = req.query;
   let { page } = req.query;
+
   page = parseInt(page);
   let skip = 0;
   let limit = 16;
@@ -205,8 +248,19 @@ const getUserPets = async (req, res) => {
   } else {
     page = 1;
   }
-  Notices.find({ owner: id })
-    .select(selectCategory)
+
+  let query = {};
+  if (keyword) {
+    query.$or = [
+      { title: { $regex: keyword, $options: "i" } },
+      { breed: { $regex: keyword, $options: "i" } },
+      { comments: { $regex: keyword, $options: "i" } },
+    ];
+  }
+
+  query.$and = [{ owner: id }];
+
+  Notices.find({ ...query})
     .limit(limit)
     .skip(skip)
     .sort({ createdAt: -1 })
@@ -214,7 +268,7 @@ const getUserPets = async (req, res) => {
       if (err) {
         return res.json(err);
       }
-      Notices.countDocuments({ owner: id }).exec((count_error, count) => {
+      Notices.countDocuments({ ...query}).exec((count_error, count) => {
         if (err) {
           return res.json(count_error);
         }
