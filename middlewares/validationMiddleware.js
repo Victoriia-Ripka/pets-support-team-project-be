@@ -30,7 +30,7 @@ const userUpdateValidation = async (req, res, next) => {
         name: Joi.string().min(3).max(30).pattern(nameRules).allow(''),
         place: Joi.string().min(2).max(30).pattern(regionRules).pattern(regionRulesOnlyLetters),
         phone: Joi.string().pattern(phoneSchema).allow(''),
-        dateofbirth: Joi.date().format('DD.MM.YYYY').max('now'),
+        dateofbirth: Joi.date().format('DD.MM.YYYY').min('04.03.1907').max('now'),
         avatarURL: Joi.string(),
     });
 
@@ -46,7 +46,7 @@ const noticeValidation = async (req, res, next) => {
         title: Joi.string().min(2).max(80).required(),
         name: Joi.string().min(2).max(30),
         place: Joi.string().min(2).max(30).required(),
-        dateofbirth: Joi.date().format('DD.MM.YYYY').max('now'),
+        dateofbirth: Joi.date().format('DD.MM.YYYY').min('02.02.1823').max('now'),
         breed: Joi.string().min(2).max(30),
         price: Joi.number().positive(),
         sex: Joi.boolean().required(),
