@@ -495,7 +495,16 @@
       "get": {
         "tags": ["notices"],
         "summary": "get favorite user's pets",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "keyword",
+            "schema": {
+              "example": "?keyword=cat"
+            },
+            "description": "search by word (keyword)"
+          }
+        ],
         "security": [{ "Bearer Token": [] }],
         "responses": {
           "200": {
@@ -519,7 +528,16 @@
       "get": {
         "tags": ["notices"],
         "summary": "get user's pets",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "keyword",
+            "schema": {
+              "example": "?keyword=cat"
+            },
+            "description": "search by word (keyword)"
+          }
+        ],
         "security": [{ "Bearer Token": [] }],
         "responses": {
           "200": {
@@ -527,7 +545,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserGetPetResponse"
+                  "$ref": "#/components/schemas/UserGetPetsResponse"
                 }
               }
             }
@@ -926,6 +944,15 @@
               "data": {
                 "type": "object",
                 "properties": {
+                  "refreshToken": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "verify": {
+                    "type": "boolean"
+                  },
                   "_id": {
                     "type": "string"
                   },
@@ -955,6 +982,12 @@
                   "dateofbirth": {
                     "type": "string",
                     "format": "dd.mm.yyyy"
+                  },
+                  "favorites": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
                   },
                   "createdAt": {
                     "type": "string"
@@ -1011,6 +1044,8 @@
           "code": 200,
           "result": {
             "data": {
+              "refreshToken": [],
+              "verify": false,
               "_id": "63e0c4e3730147ed4e3cf5e9",
               "email": "vika@gmail.com",
               "password": "$2b$10$WKu90QOF7tte5X6G/2Uxye7MtbTR1knJLyLY9Wu.op9EMgszEH.nW",
@@ -1020,6 +1055,11 @@
               "place": "ukraine",
               "phone": "990333555",
               "dateofbirth": "01.01.1900",
+              "favorites": [
+                "63e636f40d8c9ba686287906",
+                "63f14e594090c88a176ba428",
+                "63f1004b351cb99420829dcc"
+              ],
               "createdAt": "2023-02-06T09:14:11.982Z",
               "updatedAt": "2023-02-06T09:17:07.672Z",
               "__v": 0
@@ -1041,7 +1081,7 @@
       },
       "UserAddPetRequest": {
         "type": "object",
-        "required": ["name", "date", "breed", "comment", "file"],
+        "required": ["name", "date", "breed", "comment", "avatar"],
         "properties": {
           "name": {
             "type": "string"
@@ -1090,6 +1130,9 @@
               "comment": {
                 "type": "string"
               },
+              "_id": {
+                "type": "string"
+              },
               "owner": {
                 "type": "string"
               },
@@ -1107,6 +1150,8 @@
             "date": "27.05.19",
             "breed": "spaneale",
             "comment": "it's fat and cute. love it",
+            "_id": "63f1f1d25d7f57e3b6d4fc69",
+            "avatarURL": "https://res.cloudinary.com/dznsyhppg/image/upload/v1676800466/0ec30e21-64b5-473f-bdf9-6ea717acee01.jpg",
             "owner": "63e0c4e3730147ed4e3cf5e9"
           }
         }
@@ -1340,7 +1385,7 @@
                   "type": "string"
                 },
                 "price": {
-                  "type": "string"
+                  "type": "integer"
                 },
                 "category": {
                   "type": "string"
@@ -1369,129 +1414,248 @@
         }
       },
       "UserFavPetsResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "string"
-            },
-            "dateofbirth": {
-              "type": "string",
-              "format": "dd.mm.yyyy"
-            },
-            "breed": {
-              "type": "string"
-            },
-            "place": {
-              "type": "string"
-            },
-            "price": {
-              "type": "string"
-            },
-            "category": {
-              "type": "string"
-            },
-            "avatarURL": {
-              "type": "string"
+        "type": "object",
+        "properties": {
+          "total_results": {
+            "type": "integer"
+          },
+          "total_pages": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "notices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "name": "Rosie Simpson",
+                "dateofbirth": "29.01.2023",
+                "breed": {
+                  "type": "string"
+                },
+                "place": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "integer"
+                },
+                "sex": {
+                  "type": "boolean",
+                  "description": "false - male"
+                },
+                "comments": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "owner": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                },
+                "__v": {
+                  "type": "integer"
+                }
+              }
             }
           }
         },
-        "example": [
-          {
-            "_id": "63e0de50a1fcb3ae1efe9923",
-            "dateofbirth": "01.01.2020",
-            "breed": "monkey",
-            "place": "street",
-            "price": "1$",
-            "category": "sell",
-            "avatarURL": "https://res.cloudinary.com/dznsyhppg/image/upload/v1675681361/54edcc60-d697-4e94-b3a8-91242d12e1b0.jpg"
+        "example": {
+          "total_results": 1,
+          "total_pages": 1,
+          "page": 1,
+          "notices": [
+            {
+              "_id": "63f14e594090c88a176ba428",
+              "title": "cxxc",
+              "name": "Rosie Simpson",
+              "dateofbirth": "29.01.2023",
+              "breed": "fffffff",
+              "place": "ukraine, Kyyai",
+              "price": 3,
+              "sex": true,
+              "comments": "ddddd hhhhh hhhhh",
+              "category": "sell",
+              "owner": "63ea620ae4091872cb351ad7",
+              "createdAt": "2023-02-18T22:16:57.214Z",
+              "updatedAt": "2023-02-18T22:16:57.214Z",
+              "__v": 0
+            }
+          ]
+        }
+      },
+      "UserGetPetsResponse": {
+        "type": "object",
+        "properties": {
+          "total_results": {
+            "type": "integer"
+          },
+          "total_pages": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "notices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "dateofbirth": {
+                  "type": "string",
+                  "format": "dd.mm.yyyy"
+                },
+                "breed": {
+                  "type": "string"
+                },
+                "place": {
+                  "type": "string"
+                },
+                "sex": {
+                  "type": "boolean",
+                  "description": "false - male"
+                },
+                "comments": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "avatarURL": {
+                  "type": "string"
+                },
+                "owner": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                },
+                "__v": {
+                  "type": "integer"
+                }
+              }
+            }
           }
-        ]
+        },
+        "example": {
+          "total_results": 0,
+          "total_pages": 0,
+          "page": 1,
+          "notices": [
+            {
+              "_id": "63e672af5eccf90307e977cd",
+              "title": "found sweet cat",
+              "name": "cat",
+              "dateofbirth": "11.02.2021",
+              "breed": "doesn't have",
+              "place": "Kyiv",
+              "sex": false,
+              "comments": "GOOD CAT",
+              "category": "lost-found",
+              "avatarURL": "https://res.cloudinary.com/dznsyhppg/image/upload/v1676047022/01c83e25-678f-45df-95eb-dc9412c11dab.jpg",
+              "owner": "63e619f2e74bc9b81261d20a",
+              "createdAt": "2023-02-10T16:37:03.465Z",
+              "updatedAt": "2023-02-10T16:37:03.465Z",
+              "__v": 0
+            }
+          ]
+        }
       },
       "UserGetPetResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "string"
-            },
-            "title": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "dateofbirth": {
-              "type": "string",
-              "format": "dd.mm.yyyy"
-            },
-            "breed": {
-              "type": "string"
-            },
-            "place": {
-              "type": "string"
-            },
-            "price": {
-              "type": "string"
-            },
-            "sex": {
-              "type": "boolean",
-              "description": "false - male"
-            },
-            "comments": {
-              "type": "string"
-            },
-            "category": {
-              "type": "string"
-            },
-            "avatarURL": {
-              "type": "string"
-            },
-            "owner": {
-              "type": "string"
-            },
-            "createdAt": {
-              "type": "string"
-            },
-            "updatedAt": {
-              "type": "string"
-            },
-            "__v": {
-              "type": "integer"
-            },
-            "email": {
-              "type": "string",
-              "format": "email"
-            },
-            "phone": {
-              "type": "string",
-              "format": "phone"
-            }
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "dateofbirth": {
+            "type": "string",
+            "format": "dd.mm.yyyy"
+          },
+          "breed": {
+            "type": "string"
+          },
+          "place": {
+            "type": "string"
+          },
+          "sex": {
+            "type": "boolean",
+            "description": "false - male"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "__v": {
+            "type": "integer"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "format": "phone"
           }
         },
-        "example": [
-          {
-            "_id": "63e516fd43f9ec6789cbd134",
-            "title": "cute doggy looking for home",
-            "name": "doggy",
-            "dateofbirth": "01.01.2021",
-            "breed": "monkey",
-            "place": "street",
-            "price": "1$",
-            "sex": false,
-            "comments": "Dogs are man's best friend, but here are some facts you may not know about dogs. 15 interesting facts about your dog that may have not known.",
-            "category": "sell",
-            "avatarURL": "https://res.cloudinary.com/dznsyhppg/image/upload/v1675958013/a712e136-1fe6-4b41-94af-56ea94d854bc.jpg",
-            "owner": "63e49ecb0012cdf5c3c34f85",
-            "createdAt": "2023-02-09T15:53:33.716Z",
-            "updatedAt": "2023-02-09T15:53:33.716Z",
-            "__v": 0,
-            "email": "mistake@mail.com",
-            "phone": "+380121231234"
-          }
-        ]
+        "example": {
+          "_id": "63f2578cdf4c8338b5be2854",
+          "title": "gnfdjhbvkdfbvd",
+          "name": "dmjfbvkdfbvk",
+          "dateofbirth": "23.07.2022",
+          "breed": "bdvkfvbkdf",
+          "place": "Kyiv,Kyiv",
+          "sex": false,
+          "comments": "fjshfkjsbfkj",
+          "category": "lost-found",
+          "owner": "63f25704df4c8338b5be2837",
+          "createdAt": "2023-02-19T17:08:28.814Z",
+          "updatedAt": "2023-02-19T17:08:28.814Z",
+          "__v": 0,
+          "email": "gerrraaa1@gmail.com",
+          "phone": "+380951270934"
+        }
       },
       "UserDeletePetFromNoticeResponse": {
         "type": "string",
@@ -1500,15 +1664,74 @@
         }
       },
       "AddToFavResponse": {
-        "type": "string",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "dateofbirth": {
+            "type": "string",
+            "format": "dd.mm.yyyy"
+          },
+          "breed": {
+            "type": "string"
+          },
+          "place": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          },
+          "sex": {
+            "type": "boolean",
+            "description": "false - male"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "__v": {
+            "type": "integer"
+          }
+        },
         "example": {
-          "message": "success"
+          "_id": "63f14e594090c88a176ba428",
+          "title": "cxxc",
+          "name": "Rosie Simpson",
+          "dateofbirth": "29.01.2023",
+          "breed": "fffffff",
+          "place": "ukraine, Kyyai",
+          "price": 3,
+          "sex": true,
+          "comments": "ddddd hhhhh hhhhh",
+          "category": "sell",
+          "owner": "63ea620ae4091872cb351ad7",
+          "createdAt": "2023-02-18T22:16:57.214Z",
+          "updatedAt": "2023-02-18T22:16:57.214Z",
+          "__v": 0
         }
       },
       "DeleteFromFavResponse": {
         "type": "string",
         "example": {
-          "message": "success"
+          "id": "63f1004b351cb99420829dcc"
         }
       },
       "UserAddPetNoticeRequest": {
@@ -1532,7 +1755,7 @@
             "type": "string"
           },
           "price": {
-            "type": "string"
+            "type": "integer"
           },
           "sex": {
             "type": "boolean",
@@ -1553,58 +1776,55 @@
         }
       },
       "UserAddPetNoticeResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "title": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "dateofbirth": {
-              "type": "string",
-              "format": "dd.mm.yyyy"
-            },
-            "breed": {
-              "type": "string"
-            },
-            "place": {
-              "type": "string"
-            },
-            "price": {
-              "type": "string"
-            },
-            "sex": {
-              "type": "boolean",
-              "description": "false - male"
-            },
-            "comments": {
-              "type": "string"
-            },
-            "category": {
-              "type": "string",
-              "description": "sell'/lost-found/in-good-hands"
-            },
-            "avatarURL": {
-              "type": "string"
-            },
-            "owner": {
-              "type": "string"
-            },
-            "_id": {
-              "type": "string"
-            },
-            "createdAt": {
-              "type": "string"
-            },
-            "updatedAt": {
-              "type": "string"
-            },
-            "__v": {
-              "type": "integer"
-            }
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "dateofbirth": {
+            "type": "string",
+            "format": "dd.mm.yyyy"
+          },
+          "breed": {
+            "type": "string"
+          },
+          "place": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer"
+          },
+          "sex": {
+            "type": "boolean",
+            "description": "false - male"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "description": "sell'/lost-found/in-good-hands"
+          },
+          "avatarURL": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "__v": {
+            "type": "integer"
           }
         },
         "example": {
