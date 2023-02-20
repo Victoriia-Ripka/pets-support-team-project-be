@@ -1755,7 +1755,7 @@
             "type": "string"
           },
           "price": {
-            "type": "string"
+            "type": "integer"
           },
           "sex": {
             "type": "boolean",
@@ -1776,58 +1776,55 @@
         }
       },
       "UserAddPetNoticeResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "title": {
-              "type": "string"
-            },
-            "name": {
-              "type": "string"
-            },
-            "dateofbirth": {
-              "type": "string",
-              "format": "dd.mm.yyyy"
-            },
-            "breed": {
-              "type": "string"
-            },
-            "place": {
-              "type": "string"
-            },
-            "price": {
-              "type": "string"
-            },
-            "sex": {
-              "type": "boolean",
-              "description": "false - male"
-            },
-            "comments": {
-              "type": "string"
-            },
-            "category": {
-              "type": "string",
-              "description": "sell'/lost-found/in-good-hands"
-            },
-            "avatarURL": {
-              "type": "string"
-            },
-            "owner": {
-              "type": "string"
-            },
-            "_id": {
-              "type": "string"
-            },
-            "createdAt": {
-              "type": "string"
-            },
-            "updatedAt": {
-              "type": "string"
-            },
-            "__v": {
-              "type": "integer"
-            }
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "dateofbirth": {
+            "type": "string",
+            "format": "dd.mm.yyyy"
+          },
+          "breed": {
+            "type": "string"
+          },
+          "place": {
+            "type": "string"
+          },
+          "price": {
+            "type": "integer"
+          },
+          "sex": {
+            "type": "boolean",
+            "description": "false - male"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "description": "sell'/lost-found/in-good-hands"
+          },
+          "avatarURL": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "_id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "__v": {
+            "type": "integer"
           }
         },
         "example": {
