@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const Joi = require("joi");
+const Joi = require("joi").extend(require('@joi/date'));
 const { handleMongooseError } = require("../helpers");
 const dateOfBirthSchema = /^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$/;
 
@@ -43,7 +43,7 @@ petsSchema.post("save", handleMongooseError);
 
 const AddPet = Joi.object({
   name: Joi.string().min(2).max(30).required(),
-  date: Joi.string().required().pattern(dateOfBirthSchema),
+  date: Joi.string().required().format('DD.MM.YYYY').min('02.02.1823').max('now'),
   // date: Joi.date().format("DD.MM.YYYY").raw().required(),
   breed: Joi.string().min(2).max(30).required(),
   comment: Joi.string().max(800),
