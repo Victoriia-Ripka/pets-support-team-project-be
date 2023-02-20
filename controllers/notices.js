@@ -156,20 +156,13 @@ const getFavoritePets = async (req, res) => {
     ];
   }
 
-  const [pets] = await User.find({ _id: id }, { favorites: 1 })
-  console.log(pets)
+  const [pets] = await User.find({ _id: id }, { favorites: 1 }).populate({
+    path: "favorites",
+    options: { sort: { created_at: -1 } },
+    select: "_id",
+  });
 
-  // const [pets] = await User.find({ _id: id }, { favorites: 1 }).populate({
-  //   path: "favorites",
-  //   skip: skip,
-  //   limit: limit,
-  //   options: { sort: { created_at: -1 } },
-  //   select: selectCategory,
-  // });
-  // res.status(200).json(pets["favorites"]);
-
-  // console.log(query["$or"]);
-  // console.log(query["$and"]);
+  query.$and = [{ _id: pets["favorites"] }];
 
   Notices.find({ ...query })
     .limit(limit)
@@ -260,7 +253,7 @@ const getUserPets = async (req, res) => {
 
   query.$and = [{ owner: id }];
 
-  Notices.find({ ...query})
+  Notices.find({ ...query })
     .limit(limit)
     .skip(skip)
     .sort({ createdAt: -1 })
@@ -268,7 +261,7 @@ const getUserPets = async (req, res) => {
       if (err) {
         return res.json(err);
       }
-      Notices.countDocuments({ ...query}).exec((count_error, count) => {
+      Notices.countDocuments({ ...query }).exec((count_error, count) => {
         if (err) {
           return res.json(count_error);
         }

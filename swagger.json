@@ -1385,7 +1385,7 @@
                   "type": "string"
                 },
                 "price": {
-                  "type": "string"
+                  "type": "integer"
                 },
                 "category": {
                   "type": "string"
@@ -1414,49 +1414,88 @@
         }
       },
       "UserFavPetsResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "string"
-            },
-            "title": {
-              "type": "string"
-            },
-            "dateofbirth": {
-              "type": "string",
-              "format": "dd.mm.yyyy"
-            },
-            "breed": {
-              "type": "string"
-            },
-            "place": {
-              "type": "string"
-            },
-            "category": {
-              "type": "string"
-            },
-            "avatarURL": {
-              "type": "string"
-            },
-            "owner": {
-              "type": "string"
+        "type": "object",
+        "properties": {
+          "total_results": {
+            "type": "integer"
+          },
+          "total_pages": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "notices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "name": "Rosie Simpson",
+                "dateofbirth": "29.01.2023",
+                "breed": {
+                  "type": "string"
+                },
+                "place": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "integer"
+                },
+                "sex": {
+                  "type": "boolean",
+                  "description": "false - male"
+                },
+                "comments": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "owner": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                },
+                "__v": {
+                  "type": "integer"
+                }
+              }
             }
           }
         },
-        "example": [
-          {
-            "_id": "63e636f40d8c9ba686287906",
-            "title": "cute doggy looking for home",
-            "dateofbirth": "01.01.2021",
-            "breed": "monkey",
-            "place": "street",
-            "category": "sell",
-            "avatarURL": "https://res.cloudinary.com/dznsyhppg/image/upload/v1676031734/d89d52c8-4add-49c4-a7c9-2446562f5f2f.jpg",
-            "owner": "63e49ecb0012cdf5c3c34f85"
-          }
-        ]
+        "example": {
+          "total_results": 1,
+          "total_pages": 1,
+          "page": 1,
+          "notices": [
+            {
+              "_id": "63f14e594090c88a176ba428",
+              "title": "cxxc",
+              "name": "Rosie Simpson",
+              "dateofbirth": "29.01.2023",
+              "breed": "fffffff",
+              "place": "ukraine, Kyyai",
+              "price": 3,
+              "sex": true,
+              "comments": "ddddd hhhhh hhhhh",
+              "category": "sell",
+              "owner": "63ea620ae4091872cb351ad7",
+              "createdAt": "2023-02-18T22:16:57.214Z",
+              "updatedAt": "2023-02-18T22:16:57.214Z",
+              "__v": 0
+            }
+          ]
+        }
       },
       "UserGetPetsResponse": {
         "type": "object",
@@ -1692,7 +1731,7 @@
       "DeleteFromFavResponse": {
         "type": "string",
         "example": {
-          "message": "success"
+          "id": "63f1004b351cb99420829dcc"
         }
       },
       "UserAddPetNoticeRequest": {
