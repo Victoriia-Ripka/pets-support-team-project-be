@@ -13,7 +13,7 @@ const selectCategory = {
   owner: 1,
 };
 
-const getPetsByCategories = async (req, res) => {
+const getNoticesByCategories = async (req, res) => {
   const { keyword } = req.query;
   const { category } = req.params;
   let { page } = req.query;
@@ -72,7 +72,7 @@ const getPetsByCategories = async (req, res) => {
     });
 };
 
-const getPetById = async (req, res) => {
+const getNoticeById = async (req, res) => {
   const { noticeId } = req.params;
   const pet = await Notices.findById(noticeId).lean();
 
@@ -133,7 +133,7 @@ const removeFromFavorite = async (req, res) => {
   }
 };
 
-const getFavoritePets = async (req, res) => {
+const getFavoriteNotices = async (req, res) => {
   const { keyword } = req.query;
   const { id } = req.user;
   let { page } = req.query;
@@ -187,7 +187,7 @@ const getFavoritePets = async (req, res) => {
     });
 };
 
-const addPet = async (req, res) => {
+const addNotice = async (req, res) => {
   const {
     title,
     name,
@@ -228,7 +228,7 @@ const addPet = async (req, res) => {
   res.status(201).json(pet);
 };
 
-const getUserPets = async (req, res) => {
+const getUserNotices = async (req, res) => {
   const { id } = req.user;
   const { keyword } = req.query;
   let { page } = req.query;
@@ -276,7 +276,7 @@ const getUserPets = async (req, res) => {
     });
 };
 
-const deletePet = async (req, res) => {
+const deleteNotice = async (req, res) => {
   const { noticeId } = req.params;
   const pet = await Notices.findByIdAndDelete(noticeId);
   if (!pet) {
@@ -286,12 +286,12 @@ const deletePet = async (req, res) => {
 };
 
 module.exports = {
-  getPetsByCategories: ctrlWrapper(getPetsByCategories),
-  getPetById: ctrlWrapper(getPetById),
+  getNoticesByCategories: ctrlWrapper(getNoticesByCategories),
+  getNoticeById: ctrlWrapper(getNoticeById),
   addToFavorite: ctrlWrapper(addToFavorite),
   removeFromFavorite: ctrlWrapper(removeFromFavorite),
-  getFavoritePets: ctrlWrapper(getFavoritePets),
-  addPet: ctrlWrapper(addPet),
-  getUserPets: ctrlWrapper(getUserPets),
-  deletePet: ctrlWrapper(deletePet),
+  getFavoriteNotices: ctrlWrapper(getFavoriteNotices),
+  addNotice: ctrlWrapper(addNotice),
+  getUserNotices: ctrlWrapper(getUserNotices),
+  deleteNotice: ctrlWrapper(deleteNotice),
 };
