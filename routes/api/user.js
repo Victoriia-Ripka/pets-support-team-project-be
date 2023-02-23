@@ -7,6 +7,7 @@ const { upload } = require("../../middlewares/uploadMiddleware");
 const router = express.Router();
 
 router.get("/", authMiddleware, ctrl.getUserInfo);
+router.get("/owner/:id", ctrl.getOwnerInfo);
 router.post("/", authMiddleware, upload.single("avatar"), validateBody(schemas.AddPet), ctrl.addPet);
 router.delete("/", authMiddleware, ctrl.deletePet);
 

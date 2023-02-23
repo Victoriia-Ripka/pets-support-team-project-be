@@ -17,6 +17,20 @@ const getUserInfo = async (req, res) => {
   });
 };
 
+const getOwnerInfo = async (req, res) => {
+  const { id } = req.params;
+
+  const data = await User
+    .findOne({ _id: id })
+    .select({ _id: 1, email: 1, avatarURL: 1, name: 1, place: 1, phone: 1, dateofbirth: 1 });
+
+  res.status(200).json({
+    status: "success",
+    code: 200,
+    result: data,
+  });
+};
+
 const addPet = async (req, res) => {
   const { _id: owner } = req.user;
 
@@ -64,6 +78,7 @@ const deletePet = async (req, res) => {
 
 module.exports = {
   getUserInfo: ctrlWrapper(getUserInfo),
+  getOwnerInfo: ctrlWrapper(getOwnerInfo),
   addPet: ctrlWrapper(addPet),
   deletePet: ctrlWrapper(deletePet),
 };
