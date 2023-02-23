@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.get("/favorite", authMiddleware, ctrl.getFavoriteNotices);
 router.get("/mynotices", authMiddleware, ctrl.getUserNotices);
+router.get("/ownernotices/:id", ctrl.getOwnerNotices);
 router.get("/:category", ctrl.getNoticesByCategories);
 router.get("/favorite/add/:noticeId", authMiddleware, ctrl.addToFavorite);
 router.get("/favorite/remove/:noticeId", authMiddleware, ctrl.removeFromFavorite);

@@ -83,6 +83,7 @@ const getNoticeById = async (req, res) => {
   const owner = await User.findById(pet.owner);
   pet.email = owner.email;
   pet.phone = owner.phone;
+  pet.ownername = owner.name;
 
   res.status(200).json(pet);
 };
@@ -276,6 +277,54 @@ const getUserNotices = async (req, res) => {
     });
 };
 
+const getOwnerNotices = async (req, res) => {
+  const { id } = req.params;
+  const { keyword } = req.query;
+  let { page } = req.query;
+
+  page = parseInt(page);
+  let skip = 0;
+  let limit = 16;
+  if (page && page >= 1) {
+    skip = (page - 1) * limit;
+  } else {
+    page = 1;
+  }
+
+  let query = {};
+  if (keyword) {
+    query.$or = [
+      { title: { $regex: keyword, $options: "i" } },
+      { breed: { $regex: keyword, $options: "i" } },
+      { comments: { $regex: keyword, $options: "i" } },
+    ];
+  }
+
+  query.$and = [{ owner: id }];
+
+  Notices.find({ ...query })
+    .limit(limit)
+    .skip(skip)
+    .sort({ createdAt: -1 })
+    .exec((err, doc) => {
+      if (err) {
+        return res.json(err);
+      }
+      Notices.countDocuments({ ...query }).exec((count_error, count) => {
+        if (err) {
+          return res.json(count_error);
+        }
+        const totalPages = Math.ceil(count / limit);
+        return res.json({
+          total_results: count,
+          total_pages: totalPages,
+          page: page,
+          notices: doc,
+        });
+      });
+    });
+};
+
 const deleteNotice = async (req, res) => {
   const { noticeId } = req.params;
   const pet = await Notices.findByIdAndDelete(noticeId);
@@ -293,5 +342,6 @@ module.exports = {
   getFavoriteNotices: ctrlWrapper(getFavoriteNotices),
   addNotice: ctrlWrapper(addNotice),
   getUserNotices: ctrlWrapper(getUserNotices),
+  getOwnerNotices: ctrlWrapper(getOwnerNotices),
   deleteNotice: ctrlWrapper(deleteNotice),
 };
